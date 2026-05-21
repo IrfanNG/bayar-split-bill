@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   ArrowRight,
   Banknote,
@@ -11,7 +11,6 @@ import {
   Plus,
   Receipt,
   Send,
-  Sparkles,
   UserPlus,
   Wallet,
   X,
@@ -140,9 +139,39 @@ function injectStyles() {
     .mini-stat { background:#F8FAFC; border-radius:14px; padding:13px; }
     .table { display:grid; gap:10px; }
     .person-row { display:grid; grid-template-columns:1fr auto auto; gap:12px; align-items:center; padding:13px; background:#FBFCFE; border-radius:14px; }
+    .person-actions { display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
     .share-box { display:flex; gap:10px; align-items:center; padding:12px; background:#F8FAFC; border-radius:14px; overflow:hidden; }
     .share-url { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--muted); font-weight:700; }
     .pay-card { width:min(720px, 100%); padding:24px; margin:26px auto 80px; }
+    .pay-shell { min-height:100vh; display:grid; place-items:start center; padding:34px 0 70px; }
+    .pay-wrap { width:min(480px, 100%); display:grid; gap:16px; }
+    .pay-logo { justify-content:center; margin-bottom:2px; }
+    .pay-logo .logo-img { width:92px; }
+    .public-pay-card { padding:22px; }
+    .pay-title-row { display:flex; gap:14px; align-items:flex-start; }
+    .pay-title-row h1 { margin:0 0 6px; font-size:30px; letter-spacing:-.055em; line-height:1; }
+    .pay-divider { height:1px; background:#EEF1F5; margin:18px 0; }
+    .pay-share-amount { color:var(--green); font-size:38px; font-weight:900; letter-spacing:-.06em; margin:5px 0; }
+    .pay-banner { padding:12px 13px; border-radius:14px; font-weight:800; line-height:1.45; }
+    .pay-warning { background:#FFF7E6; color:#9A5B00; }
+    .pay-info { background:rgba(0,200,150,.12); color:#007D63; text-align:center; }
+    .pay-error { background:rgba(255,77,79,.1); color:var(--danger); text-align:center; }
+    .sheet-head { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+    .sheet-amount { text-align:center; color:var(--green); font-size:38px; font-weight:900; letter-spacing:-.06em; margin:8px 0 16px; }
+    .method-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:9px; }
+    .method-card { border:1px solid #E5E7EB; background:#fff; border-radius:14px; padding:13px 8px; font-weight:900; color:var(--navy); cursor:pointer; transition:200ms ease; text-align:center; }
+    .method-card.active { border-color:var(--green); background:rgba(0,200,150,.1); box-shadow:0 8px 20px rgba(0,200,150,.12); }
+    .upload-zone { display:block; width:100%; box-sizing:border-box; border:1.5px dashed #CBD5E1; border-radius:16px; padding:18px; text-align:center; color:var(--muted); font-weight:800; cursor:pointer; background:#FBFCFE; transition:200ms ease; }
+    .upload-input { display:none !important; }
+    .upload-zone:hover { border-color:var(--green); background:rgba(0,200,150,.06); }
+    .receipt-ok { color:#008C69; font-weight:900; margin-top:8px; }
+    .success-card { width:min(480px, 100%); padding:28px; text-align:center; margin:0 auto; }
+    .powered { display:grid; justify-items:center; gap:4px; margin-top:28px; font-size:13px; font-weight:800; color:var(--muted); }
+    .powered .logo-img { width:76px; }
+    .empty-card { width:min(480px, 100%); justify-self:center; text-align:center; padding:34px; }
+    .empty-card:hover { transform:translateY(-2px); }
+    .empty-illust { font-size:46px; margin-bottom:12px; }
+    .empty-card .btn { animation:softPulse 900ms ease 1.2s 1; }
     .modal-backdrop { position:fixed; inset:0; background:rgba(15,31,61,.45); display:grid; place-items:center; padding:18px; z-index:30; }
     .modal { width:min(460px, 100%); padding:22px; }
     .toast-wrap { position:fixed; top:18px; right:18px; display:grid; gap:10px; z-index:50; }
@@ -156,8 +185,9 @@ function injectStyles() {
     @keyframes shimmer { 100% { transform:translateX(100%); } }
     @keyframes slideIn { from { transform:translateY(-8px); opacity:0; } to { transform:none; opacity:1; } }
     @keyframes draw { to { stroke-dashoffset:0; } }
+    @keyframes softPulse { 0%,100%{transform:scale(1)} 45%{transform:scale(1.045)} }
     @media (max-width: 880px) { .hero, .detail-grid, .create-grid { grid-template-columns:1fr; } .summary { grid-template-columns:repeat(2,1fr); } .bill-grid { grid-template-columns:1fr; } .mock-wrap { min-height:380px; } .participant { grid-template-columns:1fr; } .ring-wrap { position:static; } }
-    @media (max-width: 560px) { .container { width:min(100% - 22px, 1120px); } .nav { height:68px; } .use-grid { grid-template-columns:repeat(2,1fr); } .summary { grid-template-columns:1fr; } .dash-head { flex-direction:column; } .person-row { grid-template-columns:1fr; } .money-row { grid-template-columns:1fr; } .hero { padding-top:28px; } .auth-card, .pay-card { padding:18px; } }
+    @media (max-width: 560px) { .container { width:min(100% - 22px, 1120px); } .nav { height:68px; } .use-grid { grid-template-columns:repeat(2,1fr); } .summary { grid-template-columns:1fr; } .dash-head { flex-direction:column; } .person-row { grid-template-columns:1fr; } .person-actions { justify-content:flex-start; } .money-row { grid-template-columns:1fr; } .hero { padding-top:28px; } .auth-card, .pay-card { padding:18px; } .modal-backdrop { align-items:end; padding:0; } .modal { width:100%; border-radius:22px 22px 0 0; padding:22px 18px 24px; } .method-grid { grid-template-columns:1fr; } }
   `;
   document.head.appendChild(style);
 }
@@ -295,8 +325,9 @@ function Field({ label, value, onChange, type = 'text', placeholder, min, step }
   return <div className="field"><label>{label}</label><input className="input" type={type} min={min} step={step} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} /></div>;
 }
 
-function Dashboard({ session, bills, loading, showToast }) {
+function Dashboard({ session, bills, loading, showToast, onToggleDemo }) {
   const mine = bills.filter((b) => b.organizerId === session?.userId);
+  const hasDemo = mine.some((b) => b.demo);
   const stats = useMemo(() => {
     const totalCollected = mine.reduce((sum, b) => sum + b.participants.filter((p) => p.paid).reduce((s, p) => s + Number(p.amount), 0), 0);
     const pending = mine.reduce((sum, b) => sum + b.participants.filter((p) => !p.paid).reduce((s, p) => s + Number(p.amount), 0), 0);
@@ -307,7 +338,7 @@ function Dashboard({ session, bills, loading, showToast }) {
     <main className="container dash">
       <div className="dash-head">
         <div><h1>Good morning, {session?.name} 👋</h1><p className="muted">Track every bill, payment, and pending member in one clean view.</p></div>
-        <button className="btn btn-primary" onClick={() => go('/create')}><Plus size={18} /> New Bill</button>
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}><button className={hasDemo ? 'btn btn-danger' : 'btn btn-ghost'} onClick={onToggleDemo}>{hasDemo ? 'Remove demo data' : 'Add demo data'}</button><button className="btn btn-primary" onClick={() => go('/create')}><Plus size={18} /> New Bill</button></div>
       </div>
       <section className="summary">
         <Summary title="Total Bills Created" value={mine.length} icon={<Receipt size={20} />} />
@@ -343,7 +374,7 @@ function BillCard({ bill, showToast }) {
 }
 
 function EmptyState() {
-  return <div className="card bill-card full" style={{ textAlign: 'center', padding: 34 }}><Sparkles color="var(--green)" /><h2>No bills yet</h2><p className="muted">Create your first split bill and start tracking payments.</p><button className="btn btn-primary" onClick={() => go('/create')}><Plus size={18} /> New Bill</button></div>;
+  return <div className="card empty-card full"><div className="empty-illust">🧾✨</div><h2 style={{ margin: '0 0 8px', fontSize: 24, letterSpacing: '-.04em' }}>No bills yet</h2><p className="muted" style={{ margin: '0 auto 20px', fontSize: 16, lineHeight: 1.55 }}>Create your first bill and share the payment link with your group.</p><button className="btn btn-primary" onClick={() => go('/create')}><Plus size={18} /> Create your first bill</button></div>;
 }
 
 function CreateBill({ session, bills, setBills }) {
@@ -399,7 +430,7 @@ function CreateBill({ session, bills, setBills }) {
   );
 }
 
-function BillDetail({ bill, updateBill, showToast }) {
+function BillDetail({ bill, showToast }) {
   const [copied, setCopied] = useState(false);
   if (!bill) return <NotFound />;
   const collected = bill.participants.filter((p) => p.paid).reduce((s, p) => s + Number(p.amount), 0);
@@ -407,10 +438,16 @@ function BillDetail({ bill, updateBill, showToast }) {
   const pct = Math.min(100, bill.totalAmount ? (collected / bill.totalAmount) * 100 : 0);
   const radius = 82;
   const circ = 2 * Math.PI * radius;
-  const shareUrl = `${location.origin}${location.pathname}#/pay/${bill.id}`;
+  const billShareUrl = `${location.origin}${location.pathname}#/pay/${bill.id}`;
   const displayUrl = `bayar.app/pay/${bill.id}`;
-  const copy = async () => { await navigator.clipboard?.writeText(shareUrl); setCopied(true); showToast('Link copied to clipboard!'); setTimeout(() => setCopied(false), 1600); };
-  const wa = () => window.open(`https://wa.me/?text=${encodeURIComponent(`Hey! Please pay your share for ${bill.title}. Click here to pay: ${shareUrl} 💳`)}`, '_blank');
+  const participantUrl = (person) => `${location.origin}${location.pathname}#/pay/${bill.id}/${person.id}`;
+  const copy = async () => { await navigator.clipboard?.writeText(billShareUrl); setCopied(true); showToast('Bill link copied to clipboard!'); setTimeout(() => setCopied(false), 1600); };
+  const copyParticipant = async (person) => { await navigator.clipboard?.writeText(participantUrl(person)); showToast(`${person.name}'s payment link copied!`); };
+  const wa = () => {
+    const pending = bill.participants.find((p) => !p.paid) || bill.participants[0];
+    const link = pending ? participantUrl(pending) : billShareUrl;
+    window.open(`https://wa.me/?text=${encodeURIComponent(`Hey ${pending?.name || ''}! Please pay your share for ${bill.title}. Click here to pay: ${link} 💳`)}`, '_blank');
+  };
   const nudge = (name) => showToast(`Reminder sent to ${name}!`);
   return (
     <main className="container dash detail-grid">
@@ -422,7 +459,7 @@ function BillDetail({ bill, updateBill, showToast }) {
         <div className="money-row"><div className="mini-stat"><div className="muted">Collected</div><b>{rm(collected)}</b></div><div className="mini-stat"><div className="muted">Remaining</div><b>{rm(remaining)}</b></div></div>
       </section>
       <section className="form">
-        <div className="card bill-card"><h2>Bill details</h2><p className="muted">{bill.description || 'No description added.'}</p><div className="table">{bill.participants.map((p) => <div className="person-row" key={p.id}><div><b>{p.name}</b><div className="muted">{p.email} · {rm(p.amount)}</div></div><StatusBadge paid={p.paid} overdue={isOverdue(bill.dueDate, p.paid)} />{!p.paid && <button className="btn btn-ghost btn-small" onClick={() => nudge(p.name)}>Nudge 👋</button>}</div>)}</div></div>
+        <div className="card bill-card"><h2>Bill details</h2><p className="muted">{bill.description || 'No description added.'}</p><div className="table">{bill.participants.map((p) => <div className="person-row" key={p.id}><div><b>{p.name}</b><div className="muted">{p.email} · {rm(p.amount)}</div></div><StatusBadge paid={p.paid} overdue={isOverdue(bill.dueDate, p.paid)} /><div className="person-actions"><button className="btn btn-ghost btn-small" onClick={() => copyParticipant(p)} aria-label={`Copy ${p.name}'s payment link`}><Copy size={15} /></button>{!p.paid && <button className="btn btn-ghost btn-small" onClick={() => nudge(p.name)}>Nudge 👋</button>}</div></div>)}</div></div>
         <div className="card bill-card"><h2>Share payment link</h2><div className="share-box"><span className="share-url">{displayUrl}</span><button className="btn btn-primary btn-small" onClick={copy}>{copied ? 'Copied! ✓' : <><Copy size={15} /> Copy</>}</button></div><button className="btn btn-accent" style={{ marginTop: 12 }} onClick={wa}>Share via WhatsApp</button></div>
       </section>
     </main>
@@ -435,33 +472,71 @@ function StatusBadge({ paid, overdue }) {
   return <span className="badge badge-pending">⏳ Pending</span>;
 }
 
-function PaymentPage({ bill, updateBill }) {
-  const [participantId, setParticipantId] = useState('');
+function PaymentPage({ bill, participantIdFromRoute, updateBill }) {
+  const [participantId, setParticipantId] = useState(participantIdFromRoute || '');
   const [method, setMethod] = useState('FPX');
   const [receipt, setReceipt] = useState('');
   const [modal, setModal] = useState(false);
   const [success, setSuccess] = useState(false);
-  if (!bill) return <NotFound />;
+  useEffect(() => {
+    setParticipantId(participantIdFromRoute || '');
+    setModal(false);
+    setSuccess(false);
+    setReceipt('');
+  }, [participantIdFromRoute, bill?.id]);
+  if (!bill) return <PaymentError />;
   const participant = bill.participants.find((p) => p.id === participantId);
+  if (participantIdFromRoute && !participant) return <PaymentError />;
+  const cat = CATEGORIES[bill.category] || CATEGORIES.makan;
+  const overdue = participant ? isOverdue(bill.dueDate, participant.paid) : false;
   const confirm = async () => {
     const next = { ...bill, participants: bill.participants.map((p) => p.id === participantId ? { ...p, paid: true, paidAt: new Date().toISOString(), receipt: receipt || null, paymentMethod: method } : p) };
     await updateBill(next);
     setModal(false);
     setSuccess(true);
   };
-  if (success) return <main className="container auth-shell"><section className="card pay-card" style={{ textAlign: 'center' }}><svg className="checkmark" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="rgba(0,200,150,.12)" /><path d="M30 52 L44 66 L72 34" fill="none" stroke="#00C896" strokeWidth="9" strokeLinecap="round" strokeLinejoin="round" /></svg><h1>Payment recorded!</h1><p className="muted">The organizer has been notified.</p><button className="btn btn-primary" onClick={() => go('/')}>Back to Bayar</button></section></main>;
+  if (success) return <PaymentSuccess participant={participant} />;
   return (
-    <main className="container">
-      <section className="card pay-card">
-        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 14, alignItems: 'flex-start' }}><div><span className="cat">{CATEGORIES[bill.category]?.icon}</span><h1 style={{ letterSpacing: '-.05em' }}>{bill.title}</h1><p className="muted">Organized by {bill.organizerName || 'Organizer'} · Due {bill.dueDate}</p></div><StatusBadge paid={participant?.paid} overdue={participant ? isOverdue(bill.dueDate, participant.paid) : false} /></div>
-        <p className="muted">{bill.description}</p>
-        <div className="field"><label>Select your name</label><select className="select" value={participantId} onChange={(e) => setParticipantId(e.target.value)}><option value="">Choose participant</option>{bill.participants.map((p) => <option key={p.id} value={p.id}>{p.name} — {rm(p.amount)} {p.paid ? '(Paid)' : ''}</option>)}</select></div>
-        {participant && <div className="card bill-card" style={{ marginTop: 14, background: '#FBFCFE' }}><div className="muted">Amount owed</div><h2 style={{ margin: '6px 0' }}>{rm(participant.amount)}</h2><StatusBadge paid={participant.paid} overdue={isOverdue(bill.dueDate, participant.paid)} /></div>}
-        <button className="btn btn-primary" style={{ width: '100%', marginTop: 16 }} disabled={!participant || participant.paid} onClick={() => setModal(true)}>Confirm Payment</button>
-      </section>
-      {modal && <div className="modal-backdrop"><section className="card modal"><h2>Simulated payment</h2><p className="muted">Amount: <b>{rm(participant?.amount)}</b></p><div className="form"><div className="field"><label>Payment Method</label><select className="select" value={method} onChange={(e) => setMethod(e.target.value)}><option>FPX</option><option>Online Banking</option><option>Manual Transfer</option></select></div><div className="field"><label>Upload Receipt (optional)</label><input className="input" type="file" onChange={(e) => setReceipt(e.target.files?.[0]?.name || '')} /></div><button className="btn btn-accent" onClick={confirm}><Check size={18} /> I've Paid</button><button className="btn btn-ghost" onClick={() => setModal(false)}>Cancel</button></div></section></div>}
+    <main className="container pay-shell">
+      <div className="pay-wrap">
+        <div className="logo pay-logo"><span className="logo-mark"><img className="logo-img" src="/Bayar-logo.png" alt="Bayar logo" /></span></div>
+        {overdue && <div className="pay-banner pay-warning">⚠️ This bill was due on {bill.dueDate}. You can still confirm payment.</div>}
+        <section className="card public-pay-card">
+          <div className="pay-title-row"><span className="cat">{cat.icon}</span><div><h1>{bill.title}</h1><p className="muted" style={{ margin: 0, fontWeight: 700 }}>Requested by {bill.organizerName || 'Organizer'}</p></div></div>
+          <p className="muted" style={{ lineHeight: 1.6 }}>{bill.description || 'No description added.'}</p>
+          <p className="muted" style={{ display: 'flex', alignItems: 'center', gap: 7, fontWeight: 800 }}><Calendar size={16} /> Due {bill.dueDate}</p>
+          {!participantIdFromRoute && <div className="field" style={{ marginTop: 12 }}><label>Select your name</label><select className="select" value={participantId} onChange={(e) => setParticipantId(e.target.value)}><option value="">Choose participant</option>{bill.participants.map((p) => <option key={p.id} value={p.id}>{p.name} — {rm(p.amount)} {p.paid ? '(Paid)' : ''}</option>)}</select></div>}
+          {participant && <><div className="pay-divider" /><div className="muted" style={{ fontWeight: 900 }}>Your share</div><div className="pay-share-amount">{rm(participant.amount)}</div><p className="muted" style={{ margin: 0 }}>This is your portion of {bill.title}</p></>}
+        </section>
+        {participant?.paid ? <div className="pay-banner pay-info">✅ You've already confirmed payment for this bill.</div> : <button className="btn btn-primary" style={{ width: '100%' }} disabled={!participant} onClick={() => setModal(true)}>Confirm My Payment <ArrowRight size={18} /></button>}
+      </div>
+      {modal && <PaymentModal participant={participant} method={method} setMethod={setMethod} receipt={receipt} setReceipt={setReceipt} onClose={() => setModal(false)} onConfirm={confirm} />}
     </main>
   );
+}
+
+function PaymentModal({ participant, method, setMethod, receipt, setReceipt, onClose, onConfirm }) {
+  const methods = [{ value: 'FPX', label: '🏦 FPX' }, { value: 'Online Banking', label: '💳 Online Banking' }, { value: 'Manual Transfer', label: '📋 Manual Transfer' }];
+  return (
+    <div className="modal-backdrop">
+      <section className="card modal">
+        <div className="sheet-head"><h2 style={{ margin: 0, letterSpacing: '-.04em' }}>Complete Payment</h2><button className="btn btn-ghost btn-small" onClick={onClose} aria-label="Close payment modal"><X size={17} /></button></div>
+        <div className="sheet-amount">{rm(participant?.amount)}</div>
+        <div className="method-grid">{methods.map((item) => <button key={item.value} className={`method-card ${method === item.value ? 'active' : ''}`} onClick={() => setMethod(item.value)}>{item.label}</button>)}</div>
+        <label className="upload-zone" style={{ marginTop: 14 }}><input className="upload-input" type="file" onChange={(e) => setReceipt(e.target.files?.[0]?.name || '')} /><div>📎</div><div>Tap to upload receipt (optional)</div>{receipt && <div className="receipt-ok">✓ {receipt}</div>}</label>
+        <button className="btn btn-accent" style={{ width: '100%', marginTop: 14 }} onClick={onConfirm}>I've Paid ✓</button>
+        <p className="muted" style={{ textAlign: 'center', fontSize: 13, marginBottom: 0 }}>Your payment will be recorded and the organizer will be notified.</p>
+      </section>
+    </div>
+  );
+}
+
+function PaymentSuccess({ participant }) {
+  return <main className="container pay-shell"><section className="card success-card"><svg className="checkmark" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="rgba(0,200,150,.12)" /><path d="M30 52 L44 66 L72 34" fill="none" stroke="#00C896" strokeWidth="9" strokeLinecap="round" strokeLinejoin="round" /></svg><h1 style={{ letterSpacing: '-.05em' }}>Payment Recorded! 🎉</h1><p className="muted" style={{ fontSize: 17, lineHeight: 1.55 }}>Thanks {participant?.name}! Your payment of {rm(participant?.amount)} has been recorded.</p><p className="muted">The organizer has been notified.</p><div className="powered"><img className="logo-img" src="/Bayar-logo.png" alt="Bayar logo" /><span>Powered by Bayar</span></div></section></main>;
+}
+
+function PaymentError() {
+  return <main className="container pay-shell"><section className="card success-card"><div className="pay-banner pay-error">❌ This payment link is invalid or has expired.</div><div className="powered"><img className="logo-img" src="/Bayar-logo.png" alt="Bayar logo" /><span>Powered by Bayar</span></div></section></main>;
 }
 
 function NotFound() {
@@ -484,16 +559,21 @@ export default function BayarApp() {
     injectStyles();
     (async () => {
       const [storedUsers, storedSession, storedBills] = await Promise.all([storage.get('users', []), storage.get('session', null), storage.get('bills', [])]);
+      const clearExistingBillsOnce = !localStorage.getItem('bayar_existing_bills_cleared_once');
+      if (clearExistingBillsOnce) {
+        await storage.set('bills', []);
+        localStorage.setItem('bayar_existing_bills_cleared_once', 'true');
+      }
       setUsers(storedUsers);
       setSession(storedSession);
-      setBills(storedBills);
+      setBills(clearExistingBillsOnce ? [] : storedBills);
       setTimeout(() => setLoading(false), 520);
     })();
   }, []);
 
   const seedDemo = async (user) => {
     const existing = await storage.get('bills', []);
-    if (existing.some((b) => b.organizerId === user.id)) return;
+    if (existing.some((b) => b.organizerId === user.id && b.demo)) return;
     const demo = [
       demoBill(user, 'Bali Trip 2025', 'trip', 1280, 4, 6, 14),
       demoBill(user, 'Friday Makan Team', 'makan', 360, 3, 5, 3),
@@ -502,6 +582,18 @@ export default function BayarApp() {
     const next = [...demo, ...existing];
     await storage.set('bills', next);
     setBills(next);
+  };
+
+  const toggleDemoData = async () => {
+    if (!session) return;
+    const hasDemo = bills.some((b) => b.organizerId === session.userId && b.demo);
+    const user = { id: session.userId, name: session.name, email: session.email };
+    const next = hasDemo
+      ? bills.filter((b) => !(b.organizerId === session.userId && b.demo))
+      : [demoBill(user, 'Bali Trip 2025', 'trip', 1280, 4, 6, 14), demoBill(user, 'Friday Makan Team', 'makan', 360, 3, 5, 3), demoBill(user, 'House Utilities May', 'house', 420, 1, 4, -2), ...bills];
+    await storage.set('bills', next);
+    setBills(next);
+    show(hasDemo ? 'Demo data removed' : 'Demo data added');
   };
 
   const updateBill = async (nextBill) => {
@@ -518,16 +610,18 @@ export default function BayarApp() {
 
   const requireAuth = (view) => session ? view : <Auth mode="login" users={users} setUsers={setUsers} setSession={setSession} seedDemo={seedDemo} />;
   const billId = route.match(/^\/bill\/([^/]+)/)?.[1];
-  const payId = route.match(/^\/pay\/([^/]+)/)?.[1];
-  const page = payId ? <PaymentPage bill={bills.find((b) => b.id === payId)} updateBill={updateBill} />
-    : billId ? requireAuth(<BillDetail bill={bills.find((b) => b.id === billId)} updateBill={updateBill} showToast={show} />)
+  const payMatch = route.match(/^\/pay\/([^/]+)(?:\/([^/]+))?/);
+  const payId = payMatch?.[1];
+  const payParticipantId = payMatch?.[2];
+  const page = payId ? <PaymentPage bill={bills.find((b) => b.id === payId)} participantIdFromRoute={payParticipantId} updateBill={updateBill} />
+    : billId ? requireAuth(<BillDetail bill={bills.find((b) => b.id === billId)} showToast={show} />)
     : route === '/login' ? <Auth mode="login" users={users} setUsers={setUsers} setSession={setSession} seedDemo={seedDemo} />
     : route === '/signup' ? <Auth mode="signup" users={users} setUsers={setUsers} setSession={setSession} seedDemo={seedDemo} />
-    : route === '/dashboard' ? requireAuth(<Dashboard session={session} bills={bills} loading={loading} showToast={show} />)
+    : route === '/dashboard' ? requireAuth(<Dashboard session={session} bills={bills} loading={loading} showToast={show} onToggleDemo={toggleDemoData} />)
     : route === '/create' ? requireAuth(<CreateBill session={session} bills={bills} setBills={setBills} />)
     : route === '/' ? <Landing /> : <NotFound />;
 
-  return <div className="bayar-app"><Header session={session} onLogout={logout} />{page}<Toasts items={toasts} /></div>;
+  return <div className="bayar-app">{!payId && <Header session={session} onLogout={logout} />}{page}<Toasts items={toasts} /></div>;
 }
 
 function demoBill(user, title, category, total, paidCount, peopleCount, dueOffset) {
@@ -536,7 +630,7 @@ function demoBill(user, title, category, total, paidCount, peopleCount, dueOffse
   const names = ['Aina', 'Hakim', 'Danial', 'Maya', 'Idris', 'Adam'];
   const amount = Number((total / peopleCount).toFixed(2));
   return {
-    id: uid('bill'), organizerId: user.id, organizerName: user.name, title, category,
+    id: uid('bill'), organizerId: user.id, organizerName: user.name, title, category, demo: true,
     description: `${CATEGORIES[category].label} expenses shared with the group.`, totalAmount: total,
     dueDate: due.toISOString().slice(0, 10), createdAt: new Date().toISOString(),
     participants: Array.from({ length: peopleCount }).map((_, index) => ({
