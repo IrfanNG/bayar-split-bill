@@ -58,6 +58,15 @@ const storage = {
 const uid = (prefix) => `${prefix}_${Math.random().toString(36).slice(2, 9)}`;
 const rm = (value) => `RM ${Number(value || 0).toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 const todayIso = () => new Date().toISOString().slice(0, 10);
+const formatDate = (dateStr) => {
+  if (!dateStr) return '';
+  const d = new Date(`${dateStr}T00:00:00`);
+  return d.toLocaleDateString('en-MY', { day: 'numeric', month: 'long', year: 'numeric' });
+};
+const getParticipantLink = (billId, participantId) => {
+  const base = window.location.href.split('#')[0];
+  return `${base}#/pay/${billId}/${participantId}`;
+};
 const isOverdue = (dueDate, paid) => !paid && dueDate && new Date(`${dueDate}T23:59:59`) < new Date();
 const hashToRoute = () => window.location.hash.replace(/^#/, '') || '/';
 const go = (path) => { window.location.hash = path; };
@@ -366,7 +375,7 @@ function BillCard({ bill, showToast }) {
   const share = () => { navigator.clipboard?.writeText(`${location.origin}${location.pathname}#/pay/${bill.id}`); showToast('Payment link copied!'); };
   return (
     <article className="card bill-card">
-      <div className="bill-top"><div><span className="cat">{cat.icon}</span><h3 style={{ margin: '12px 0 4px' }}>{bill.title}</h3><div className="muted"><Calendar size={14} style={{ verticalAlign: -2 }} /> Due {bill.dueDate}</div></div><span className="badge badge-paid">Paid {paidCount}/{bill.participants.length}</span></div>
+      <div className="bill-top"><div><span className="cat">{cat.icon}</span><h3 style={{ margin: '12px 0 4px' }}>{bill.title}</h3><div className="muted"><Calendar size={14} style={{ verticalAlign: -2 }} /> Due {formatDate(bill.dueDate)}</div></div><span className="badge badge-paid">Paid {paidCount}/{bill.participants.length}</span></div>
       <div style={{ marginTop: 16 }}><div className="progress"><span style={{ '--w': `${pct}%` }} /></div><div className="muted" style={{ marginTop: 8, fontWeight: 700 }}>{rm(collected)} of {rm(bill.totalAmount)}</div></div>
       <div className="bill-actions"><button className="btn btn-primary btn-small" onClick={() => go(`/bill/${bill.id}`)}>View</button><button className="btn btn-ghost btn-small" onClick={share}><Send size={15} /> Share</button></div>
     </article>
@@ -420,7 +429,7 @@ function CreateBill({ session, bills, setBills }) {
           <div className="field"><label>Category</label><select className="select" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>{Object.entries(CATEGORIES).map(([key, cat]) => <option key={key} value={key}>{cat.icon} {cat.label}</option>)}</select></div>
           <div className="field full"><label>Description</label><textarea className="textarea" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Flights, hotel, food, and shared transport." /></div>
           <Field label="Total Amount (RM)" type="number" min="0" step="0.01" value={form.totalAmount} onChange={(v) => setForm({ ...form, totalAmount: v })} placeholder="1200.00" />
-          <Field label="Due Date" type="date" value={form.dueDate} onChange={(v) => setForm({ ...form, dueDate: v })} />
+          <div className="field"><Field label="Due Date" type="date" value={form.dueDate} onChange={(v) => setForm({ ...form, dueDate: v })} />{form.dueDate && <span className="muted" style={{ fontSize: 13, fontWeight: 800 }}>Selected: {formatDate(form.dueDate)}</span>}</div>
           <div className="field full"><label>Split Method</label><select className="select" value={split} onChange={(e) => setSplit(e.target.value)}><option value="equal">Equal split</option><option value="custom">Custom per person</option></select></div>
           <div className="full"><h3>Participants</h3><div className="form">{people.map((p) => <div className="participant" key={p.id}><Field label="Name" value={p.name} onChange={(v) => updatePerson(p.id, 'name', v)} placeholder="Aina" /><Field label="Email" type="email" value={p.email} onChange={(v) => updatePerson(p.id, 'email', v)} placeholder="aina@email.com" />{split === 'custom' ? <Field label="Amount" type="number" step="0.01" value={p.amount} onChange={(v) => updatePerson(p.id, 'amount', v)} placeholder="150.00" /> : <div className="muted" style={{ fontWeight: 800 }}>Auto split</div>}<button className="btn btn-danger btn-small" type="button" onClick={() => removePerson(p.id)}><X size={15} /></button></div>)}</div><button className="btn btn-ghost" style={{ marginTop: 12 }} type="button" onClick={addPerson}><Plus size={17} /> Add participant</button></div>
           <button className="btn btn-primary full" type="submit">Create Bill <ArrowRight size={18} /></button>
@@ -432,6 +441,7 @@ function CreateBill({ session, bills, setBills }) {
 
 function BillDetail({ bill, showToast }) {
   const [copied, setCopied] = useState(false);
+  const [copiedParticipantId, setCopiedParticipantId] = useState('');
   if (!bill) return <NotFound />;
   const collected = bill.participants.filter((p) => p.paid).reduce((s, p) => s + Number(p.amount), 0);
   const remaining = bill.totalAmount - collected;
@@ -440,27 +450,32 @@ function BillDetail({ bill, showToast }) {
   const circ = 2 * Math.PI * radius;
   const billShareUrl = `${location.origin}${location.pathname}#/pay/${bill.id}`;
   const displayUrl = `bayar.app/pay/${bill.id}`;
-  const participantUrl = (person) => `${location.origin}${location.pathname}#/pay/${bill.id}/${person.id}`;
   const copy = async () => { await navigator.clipboard?.writeText(billShareUrl); setCopied(true); showToast('Bill link copied to clipboard!'); setTimeout(() => setCopied(false), 1600); };
-  const copyParticipant = async (person) => { await navigator.clipboard?.writeText(participantUrl(person)); showToast(`${person.name}'s payment link copied!`); };
-  const wa = () => {
-    const pending = bill.participants.find((p) => !p.paid) || bill.participants[0];
-    const link = pending ? participantUrl(pending) : billShareUrl;
-    window.open(`https://wa.me/?text=${encodeURIComponent(`Hey ${pending?.name || ''}! Please pay your share for ${bill.title}. Click here to pay: ${link} 💳`)}`, '_blank');
+  const copyParticipant = async (person) => {
+    await navigator.clipboard?.writeText(getParticipantLink(bill.id, person.id));
+    setCopiedParticipantId(person.id);
+    showToast(`${person.name}'s payment link copied!`);
+    setTimeout(() => setCopiedParticipantId(''), 2000);
   };
-  const nudge = (name) => showToast(`Reminder sent to ${name}!`);
+  const wa = () => {
+    window.open(`https://wa.me/?text=${encodeURIComponent(`Hey! You have a pending payment for ${bill.title}.\nOpen the bill here: ${billShareUrl} 💳`)}`, '_blank');
+  };
+  const nudgeViaWhatsApp = (person) => {
+    const msg = `Hey ${person.name}! Your share of RM ${Number(person.amount).toFixed(2)} for ${bill.title} is due on ${formatDate(bill.dueDate)}. Pay here: ${getParticipantLink(bill.id, person.id)} 💳`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+  };
   return (
     <main className="container dash detail-grid">
       <section className="card ring-wrap">
         <div className="cat" style={{ margin: '0 auto 12px' }}>{CATEGORIES[bill.category]?.icon}</div>
-        <h1 style={{ margin: '0 0 6px', letterSpacing: '-.05em' }}>{bill.title}</h1><p className="muted">Due {bill.dueDate}</p>
+        <h1 style={{ margin: '0 0 6px', letterSpacing: '-.05em' }}>{bill.title}</h1><p className="muted">Due {formatDate(bill.dueDate)}</p>
         <svg className="ring" viewBox="0 0 210 210"><circle cx="105" cy="105" r={radius} fill="none" stroke="#EEF2F6" strokeWidth="16" /><circle className="progress-ring" cx="105" cy="105" r={radius} fill="none" strokeWidth="16" strokeDasharray={circ} strokeDashoffset={circ - (pct / 100) * circ} /><text x="105" y="99" textAnchor="middle" fontSize="33" fontWeight="900" fill="#0F1F3D">{Math.round(pct)}%</text><text x="105" y="126" textAnchor="middle" fontSize="13" fontWeight="800" fill="#6B7280">collected</text></svg>
         <div className="progress"><span style={{ '--w': `${pct}%` }} /></div>
         <div className="money-row"><div className="mini-stat"><div className="muted">Collected</div><b>{rm(collected)}</b></div><div className="mini-stat"><div className="muted">Remaining</div><b>{rm(remaining)}</b></div></div>
       </section>
       <section className="form">
-        <div className="card bill-card"><h2>Bill details</h2><p className="muted">{bill.description || 'No description added.'}</p><div className="table">{bill.participants.map((p) => <div className="person-row" key={p.id}><div><b>{p.name}</b><div className="muted">{p.email} · {rm(p.amount)}</div></div><StatusBadge paid={p.paid} overdue={isOverdue(bill.dueDate, p.paid)} /><div className="person-actions"><button className="btn btn-ghost btn-small" onClick={() => copyParticipant(p)} aria-label={`Copy ${p.name}'s payment link`}><Copy size={15} /></button>{!p.paid && <button className="btn btn-ghost btn-small" onClick={() => nudge(p.name)}>Nudge 👋</button>}</div></div>)}</div></div>
-        <div className="card bill-card"><h2>Share payment link</h2><div className="share-box"><span className="share-url">{displayUrl}</span><button className="btn btn-primary btn-small" onClick={copy}>{copied ? 'Copied! ✓' : <><Copy size={15} /> Copy</>}</button></div><button className="btn btn-accent" style={{ marginTop: 12 }} onClick={wa}>Share via WhatsApp</button></div>
+        <div className="card bill-card"><h2>Bill details</h2><p className="muted">{bill.description || 'No description added.'}</p><div className="table">{bill.participants.map((p) => <div className="person-row" key={p.id}><div><b>{p.name}</b><div className="muted">{p.email} · {rm(p.amount)}</div></div><StatusBadge paid={p.paid} overdue={isOverdue(bill.dueDate, p.paid)} /><div className="person-actions">{!p.paid && <button className="btn btn-ghost btn-small" onClick={() => copyParticipant(p)} aria-label={`Copy ${p.name}'s payment link`}>{copiedParticipantId === p.id ? <Check size={15} color="var(--green)" /> : <Copy size={15} />}</button>}{!p.paid && <button className="btn btn-ghost btn-small" onClick={() => nudgeViaWhatsApp(p)}>Nudge 👋</button>}</div></div>)}</div></div>
+        <div className="card bill-card"><h2>Bill-level link (fallback)</h2><p className="muted">Share this if you want participants to self-identify, or use the per-person copy buttons above.</p><div className="share-box"><span className="share-url">{displayUrl}</span><button className="btn btn-primary btn-small" onClick={copy}>{copied ? 'Copied! ✓' : <><Copy size={15} /> Copy</>}</button></div><p className="muted" style={{ fontSize: 13, margin: '8px 0 0' }}>For personalized links, use the copy icon next to each participant above.</p><button className="btn btn-accent" style={{ marginTop: 12 }} onClick={wa}>Share via WhatsApp</button></div>
       </section>
     </main>
   );
@@ -500,11 +515,11 @@ function PaymentPage({ bill, participantIdFromRoute, updateBill }) {
     <main className="container pay-shell">
       <div className="pay-wrap">
         <div className="logo pay-logo"><span className="logo-mark"><img className="logo-img" src="/Bayar-logo.png" alt="Bayar logo" /></span></div>
-        {overdue && <div className="pay-banner pay-warning">⚠️ This bill was due on {bill.dueDate}. You can still confirm payment.</div>}
+        {overdue && <div className="pay-banner pay-warning">⚠️ This bill was due on {formatDate(bill.dueDate)}. You can still confirm payment.</div>}
         <section className="card public-pay-card">
           <div className="pay-title-row"><span className="cat">{cat.icon}</span><div><h1>{bill.title}</h1><p className="muted" style={{ margin: 0, fontWeight: 700 }}>Requested by {bill.organizerName || 'Organizer'}</p></div></div>
           <p className="muted" style={{ lineHeight: 1.6 }}>{bill.description || 'No description added.'}</p>
-          <p className="muted" style={{ display: 'flex', alignItems: 'center', gap: 7, fontWeight: 800 }}><Calendar size={16} /> Due {bill.dueDate}</p>
+          <p className="muted" style={{ display: 'flex', alignItems: 'center', gap: 7, fontWeight: 800 }}><Calendar size={16} /> Due {formatDate(bill.dueDate)}</p>
           {!participantIdFromRoute && <div className="field" style={{ marginTop: 12 }}><label>Select your name</label><select className="select" value={participantId} onChange={(e) => setParticipantId(e.target.value)}><option value="">Choose participant</option>{bill.participants.map((p) => <option key={p.id} value={p.id}>{p.name} — {rm(p.amount)} {p.paid ? '(Paid)' : ''}</option>)}</select></div>}
           {participant && <><div className="pay-divider" /><div className="muted" style={{ fontWeight: 900 }}>Your share</div><div className="pay-share-amount">{rm(participant.amount)}</div><p className="muted" style={{ margin: 0 }}>This is your portion of {bill.title}</p></>}
         </section>
