@@ -391,6 +391,10 @@ function CreateBill({ session, bills, setBills }) {
   const [split, setSplit] = useState('equal');
   const [form, setForm] = useState({ title: '', category: 'makan', description: '', totalAmount: '', dueDate: todayIso() });
   const [people, setPeople] = useState([{ id: uid('part'), name: '', email: '', amount: '' }, { id: uid('part'), name: '', email: '', amount: '' }]);
+  const validPeople = people.filter((p) => p.name.trim() && p.email.trim());
+  const totalAmountPreview = Number(form.totalAmount) || 0;
+  const customPeopleTotal = people.filter((p) => p.name.trim() && p.email.trim()).reduce((sum, p) => sum + Number(p.amount || 0), 0);
+  const organizerCustomShare = Math.max(0, totalAmountPreview - customPeopleTotal);
   const updatePerson = (id, key, value) => setPeople((items) => items.map((p) => p.id === id ? { ...p, [key]: value } : p));
   const addPerson = () => setPeople((items) => [...items, { id: uid('part'), name: '', email: '', amount: '' }]);
   const removePerson = (id) => setPeople((items) => items.length > 1 ? items.filter((p) => p.id !== id) : items);
@@ -398,21 +402,26 @@ function CreateBill({ session, bills, setBills }) {
     e.preventDefault();
     setError('');
     const totalAmount = Number(form.totalAmount);
-    const validPeople = people.filter((p) => p.name.trim() && p.email.trim());
     if (!form.title.trim() || !totalAmount || !form.dueDate || validPeople.length < 1) return setError('Complete bill title, amount, due date, and at least one participant.');
     let participants;
     if (split === 'equal') {
-      const amount = Number((totalAmount / validPeople.length).toFixed(2));
-      participants = validPeople.map((p, index) => ({ ...p, amount: index === validPeople.length - 1 ? Number((totalAmount - amount * (validPeople.length - 1)).toFixed(2)) : amount }));
+      const participantCount = validPeople.length + 1;
+      const amount = Number((totalAmount / participantCount).toFixed(2));
+      const organizerShare = amount;
+      const enteredParticipants = validPeople.map((p, index) => ({ ...p, amount: index === validPeople.length - 1 ? Number((totalAmount - organizerShare - amount * (validPeople.length - 1)).toFixed(2)) : amount }));
+      participants = [{ id: uid('part'), name: session.name, email: session.email, amount: organizerShare, isOrganizer: true }, ...enteredParticipants];
     } else {
-      participants = validPeople.map((p) => ({ ...p, amount: Number(p.amount) }));
-      const customTotal = participants.reduce((s, p) => s + Number(p.amount), 0);
-      if (Math.abs(customTotal - totalAmount) > 0.01) return setError(`Custom shares must total ${rm(totalAmount)}.`);
+      const enteredParticipants = validPeople.map((p) => ({ ...p, amount: Number(p.amount || 0) }));
+      const customTotal = enteredParticipants.reduce((s, p) => s + Number(p.amount), 0);
+      if (customTotal > totalAmount + 0.01) return setError('Participant amounts exceed the total bill. Please adjust.');
+      const organizerShare = Number((totalAmount - customTotal).toFixed(2));
+      participants = [{ id: uid('part'), name: session.name, email: session.email, amount: organizerShare, isOrganizer: true }, ...enteredParticipants];
     }
+    const createdAt = new Date().toISOString();
     const bill = {
       id: uid('bill'), organizerId: session.userId, organizerName: session.name, title: form.title.trim(), category: form.category,
-      description: form.description.trim(), totalAmount, dueDate: form.dueDate, createdAt: new Date().toISOString(),
-      participants: participants.map((p) => ({ id: p.id, name: p.name.trim(), email: p.email.trim().toLowerCase(), amount: Number(p.amount), paid: false, paidAt: null, receipt: null })),
+      description: form.description.trim(), totalAmount, dueDate: form.dueDate, createdAt,
+      participants: participants.map((p) => ({ id: p.id, name: p.name.trim(), email: p.email.trim().toLowerCase(), amount: Number(p.amount), paid: !!p.isOrganizer, paidAt: p.isOrganizer ? createdAt : null, receipt: null, isOrganizer: !!p.isOrganizer })),
     };
     const next = [bill, ...bills];
     await storage.set('bills', next);
@@ -431,6 +440,7 @@ function CreateBill({ session, bills, setBills }) {
           <Field label="Total Amount (RM)" type="number" min="0" step="0.01" value={form.totalAmount} onChange={(v) => setForm({ ...form, totalAmount: v })} placeholder="1200.00" />
           <div className="field"><Field label="Due Date" type="date" value={form.dueDate} onChange={(v) => setForm({ ...form, dueDate: v })} />{form.dueDate && <span className="muted" style={{ fontSize: 13, fontWeight: 800 }}>Selected: {formatDate(form.dueDate)}</span>}</div>
           <div className="field full"><label>Split Method</label><select className="select" value={split} onChange={(e) => setSplit(e.target.value)}><option value="equal">Equal split</option><option value="custom">Custom per person</option></select></div>
+          {split === 'custom' && <div className="card full" style={{ padding: 14, background: '#FBFCFE' }}><div className="muted" style={{ fontWeight: 900 }}>Your share (you)</div><strong style={{ color: customPeopleTotal > totalAmountPreview && totalAmountPreview ? 'var(--danger)' : 'var(--green)', fontSize: 24, letterSpacing: '-.04em' }}>{rm(organizerCustomShare)}</strong><p className="muted" style={{ margin: '6px 0 0', fontSize: 13 }}>Auto-calculated from total minus participant custom amounts.</p></div>}
           <div className="full"><h3>Participants</h3><div className="form">{people.map((p) => <div className="participant" key={p.id}><Field label="Name" value={p.name} onChange={(v) => updatePerson(p.id, 'name', v)} placeholder="Aina" /><Field label="Email" type="email" value={p.email} onChange={(v) => updatePerson(p.id, 'email', v)} placeholder="aina@email.com" />{split === 'custom' ? <Field label="Amount" type="number" step="0.01" value={p.amount} onChange={(v) => updatePerson(p.id, 'amount', v)} placeholder="150.00" /> : <div className="muted" style={{ fontWeight: 800 }}>Auto split</div>}<button className="btn btn-danger btn-small" type="button" onClick={() => removePerson(p.id)}><X size={15} /></button></div>)}</div><button className="btn btn-ghost" style={{ marginTop: 12 }} type="button" onClick={addPerson}><Plus size={17} /> Add participant</button></div>
           <button className="btn btn-primary full" type="submit">Create Bill <ArrowRight size={18} /></button>
         </div>
@@ -474,7 +484,7 @@ function BillDetail({ bill, showToast }) {
         <div className="money-row"><div className="mini-stat"><div className="muted">Collected</div><b>{rm(collected)}</b></div><div className="mini-stat"><div className="muted">Remaining</div><b>{rm(remaining)}</b></div></div>
       </section>
       <section className="form">
-        <div className="card bill-card"><h2>Bill details</h2><p className="muted">{bill.description || 'No description added.'}</p><div className="table">{bill.participants.map((p) => <div className="person-row" key={p.id}><div><b>{p.name}</b><div className="muted">{p.email} · {rm(p.amount)}</div></div><StatusBadge paid={p.paid} overdue={isOverdue(bill.dueDate, p.paid)} /><div className="person-actions">{!p.paid && <button className="btn btn-ghost btn-small" onClick={() => copyParticipant(p)} aria-label={`Copy ${p.name}'s payment link`}>{copiedParticipantId === p.id ? <Check size={15} color="var(--green)" /> : <Copy size={15} />}</button>}{!p.paid && <button className="btn btn-ghost btn-small" onClick={() => nudgeViaWhatsApp(p)}>Nudge 👋</button>}</div></div>)}</div></div>
+        <div className="card bill-card"><h2>Bill details</h2><p className="muted">{bill.description || 'No description added.'}</p><div className="table">{bill.participants.map((p) => <div className="person-row" key={p.id}><div><b>{p.name}{p.isOrganizer ? ' (you)' : ''}</b><div className="muted">{p.email} · {rm(p.amount)}</div></div><StatusBadge paid={p.paid} overdue={isOverdue(bill.dueDate, p.paid)} /><div className="person-actions">{!p.paid && <button className="btn btn-ghost btn-small" onClick={() => copyParticipant(p)} aria-label={`Copy ${p.name}'s payment link`}>{copiedParticipantId === p.id ? <Check size={15} color="var(--green)" /> : <Copy size={15} />}</button>}{!p.paid && <button className="btn btn-ghost btn-small" onClick={() => nudgeViaWhatsApp(p)}>Nudge 👋</button>}</div></div>)}</div></div>
         <div className="card bill-card"><h2>Bill-level link (fallback)</h2><p className="muted">Share this if you want participants to self-identify, or use the per-person copy buttons above.</p><div className="share-box"><span className="share-url">{displayUrl}</span><button className="btn btn-primary btn-small" onClick={copy}>{copied ? 'Copied! ✓' : <><Copy size={15} /> Copy</>}</button></div><p className="muted" style={{ fontSize: 13, margin: '8px 0 0' }}>For personalized links, use the copy icon next to each participant above.</p><button className="btn btn-accent" style={{ marginTop: 12 }} onClick={wa}>Share via WhatsApp</button></div>
       </section>
     </main>
