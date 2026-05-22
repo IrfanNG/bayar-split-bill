@@ -355,6 +355,304 @@ function injectStyles() {
     .receipt-val { font-size: 14px; color: var(--ink); font-weight: 500; }
     .btn-back { width: 100%; background: var(--accent); color: #fff; border: none; padding: 16px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; cursor: pointer; margin-top: 32px; }
     .btn-back:hover { opacity: 0.85; }
+
+    .bill-details-page {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 380px minmax(0, 1fr);
+      background: #1A2B4A;
+      font-family: Inter, system-ui, sans-serif;
+    }
+
+    .bill-details-sidebar {
+      background: #FAFAF7;
+      color: #0F0F0F;
+      padding: 48px;
+      border-right: 2px solid #1A1A1A;
+    }
+
+    .back-link {
+      appearance: none;
+      background: transparent;
+      border: 0;
+      color: #0F0F0F;
+      font: inherit;
+      font-size: 13px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      padding: 0;
+      margin-bottom: 56px;
+    }
+
+    .sidebar-category,
+    .sidebar-meta,
+    .summary-label {
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #77736B;
+    }
+
+    .sidebar-title {
+      font-family: Georgia, serif;
+      font-size: 44px;
+      line-height: 0.95;
+      margin: 28px 0 48px;
+      color: #0F0F0F;
+    }
+
+    .sidebar-rule {
+      height: 2px;
+      background: #1A1A1A;
+      margin: 32px 0;
+    }
+
+    .summary-block {
+      margin-bottom: 28px;
+    }
+
+    .summary-large {
+      font-family: monospace;
+      font-size: 48px;
+      letter-spacing: -0.05em;
+      color: #0F0F0F;
+      margin-top: 12px;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      border-top: 1px solid #E0DDD6;
+      padding-top: 24px;
+    }
+
+    .summary-green {
+      color: #1A6B45;
+      font-family: monospace;
+      font-size: 20px;
+    }
+
+    .summary-amber {
+      color: #B45309;
+      font-family: monospace;
+      font-size: 20px;
+    }
+
+    .percent-large {
+      font-family: Georgia, serif;
+      font-size: 80px;
+      color: #D8D3CB;
+      line-height: 1;
+    }
+
+    .bill-details-main {
+      background: #1A2B4A;
+      color: #FAFAF7;
+      padding: 64px;
+      min-width: 0;
+    }
+
+    .main-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 28px;
+      border-bottom: 1px solid rgba(250,250,247,0.7);
+      color: rgba(250,250,247,0.65);
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .participants-list {
+      margin-top: 40px;
+    }
+
+    .participant-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 32px;
+      padding: 32px 0;
+      border-bottom: 1px solid rgba(250,250,247,0.65);
+    }
+
+    .participant-info {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .participant-name {
+      color: #FAFAF7;
+      font-weight: 700;
+    }
+
+    .participant-email,
+    .participant-amount {
+      color: rgba(250,250,247,0.65);
+    }
+
+    .participant-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 32px;
+      padding: 0 14px;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 0;
+    }
+
+    .status-paid {
+      background: #1A6B45;
+      color: #FAFAF7;
+    }
+
+    .status-pending {
+      border: 1px solid #B45309;
+      color: #B45309;
+      background: transparent;
+    }
+
+    .status-overdue {
+      border: 1px solid #B91C1C;
+      color: #B91C1C;
+      background: transparent;
+    }
+
+    .copy-link-button,
+    .nudge-button,
+    .copy-button {
+      appearance: none;
+      background: transparent;
+      border: 1px solid rgba(250,250,247,0.8);
+      color: rgba(250,250,247,0.85);
+      padding: 10px 16px;
+      font: inherit;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .share-section {
+      margin-top: 48px;
+      padding-top: 32px;
+      border-top: 2px solid rgba(250,250,247,0.75);
+    }
+
+    .share-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      color: rgba(250,250,247,0.65);
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .share-link-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      margin-top: 32px;
+    }
+
+    .share-link-text {
+      min-height: 56px;
+      display: flex;
+      align-items: center;
+      background: #FAFAF7;
+      color: #0F0F0F;
+      border: 1px solid #E0DDD6;
+      padding: 0 20px;
+      font-family: monospace;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .copy-button {
+      height: 56px;
+      background: #FAFAF7;
+      color: #1A6B45;
+      border: 1px solid #1A6B45;
+      padding: 0 24px;
+    }
+
+    .whatsapp-button {
+      appearance: none;
+      display: block;
+      width: 100%;
+      height: 56px;
+      margin-top: 16px;
+      background: #1A6B45;
+      color: #FAFAF7;
+      border: none;
+      font: inherit;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .share-note {
+      margin-top: 24px;
+      color: rgba(250,250,247,0.65);
+      font-size: 14px;
+    }
+
+    .bill-details-page button {
+      border-radius: 0;
+    }
+
+    @media (max-width: 900px) {
+      .bill-details-page {
+        grid-template-columns: 1fr;
+      }
+
+      .bill-details-sidebar {
+        border-right: none;
+        border-bottom: 2px solid #1A1A1A;
+        padding: 32px 24px;
+      }
+
+      .bill-details-main {
+        padding: 32px 24px;
+      }
+
+      .participant-row {
+        grid-template-columns: 1fr;
+      }
+
+      .participant-actions {
+        align-items: stretch;
+        flex-wrap: wrap;
+      }
+
+      .share-header {
+        flex-direction: column;
+      }
+
+      .share-link-row {
+        grid-template-columns: 1fr;
+      }
+
+      .copy-button {
+        width: 100%;
+      }
+    }
+
   `;
   document.head.appendChild(style);
 }
@@ -816,87 +1114,113 @@ function BillDetail({ bill, showToast }) {
   const [copied, setCopied] = useState({});
   const [sent, setSent] = useState({});
   if (!bill) return <NotFound />;
-  const collected = bill.participants.filter((p) => p.paid).reduce((s, p) => s + Number(p.amount), 0);
+
+  const collected = bill.participants.filter((p) => p.paid).reduce((sum, p) => sum + Number(p.amount), 0);
   const total = Number(bill.totalAmount);
   const remaining = total - collected;
   const pct = total ? Math.min(100, (collected / total) * 100) : 0;
-  const overdue = isOverdue(bill.dueDate, bill.participants.every(p => p.paid));
+  const allPaid = bill.participants.every((p) => p.paid);
+  const overdue = isOverdue(bill.dueDate, allPaid);
   const billShareUrl = `${location.origin}${location.pathname}#/pay/${bill.id}`;
+  const isOrganizerParticipant = (p) => p.isOrganizer || (bill.organizerName && p.name === bill.organizerName);
+
   const copy = async (pId = 'all') => {
     const url = pId === 'all' ? billShareUrl : getParticipantLink(bill.id, pId);
-    await navigator.clipboard.writeText(url);
-    if (pId === 'all') setCopied(true); else setCopied({ ...copied, [pId]: true });
+    await navigator.clipboard?.writeText(url);
+    setCopied((current) => ({ ...current, [pId]: true }));
     showToast('Link copied!');
-    setTimeout(() => { if (pId === 'all') setCopied(false); else setCopied({ ...copied, [pId]: false }); }, 2000);
+    setTimeout(() => setCopied((current) => ({ ...current, [pId]: false })), 2000);
   };
+
   const nudge = async (p) => {
     window.open(`https://wa.me/?text=${encodeURIComponent(`Pay here: ${getParticipantLink(bill.id, p.id)}`)}`, '_blank');
-    setSent({ ...sent, [p.id]: true });
-    setTimeout(() => setSent({ ...sent, [p.id]: false }), 2000);
+    setSent((current) => ({ ...current, [p.id]: true }));
+    setTimeout(() => setSent((current) => ({ ...current, [p.id]: false })), 2000);
   };
+
   return (
-    <main className="bill-detail-page">
-      <section className="left-panel">
-        <div className="back-link" onClick={() => go('/dashboard')}>← ALL BILLS</div>
-        <div className="bill-cat">{CATEGORIES[bill.category]?.label.toUpperCase()}</div>
-        <h1 className="bill-title">{bill.title}</h1>
-        <p className="bill-desc">{bill.description}</p>
-        <div className={`bill-due ${overdue ? 'overdue' : ''}`}>
-          {overdue ? 'OVERDUE' : 'DUE'} — {formatDate(bill.dueDate).toUpperCase()}
+    <div className="bill-details-page">
+      <aside className="bill-details-sidebar">
+        <button className="back-link" onClick={() => go('/dashboard')}>← ALL BILLS</button>
+
+        <div className="sidebar-category">{CATEGORIES[bill.category]?.label.toUpperCase() || 'BILL'}</div>
+        <h1 className="sidebar-title">{bill.title}</h1>
+
+        <div className="sidebar-meta">{overdue ? 'OVERDUE' : 'DUE'} — {formatDate(bill.dueDate).toUpperCase()}</div>
+
+        <div className="sidebar-rule"></div>
+
+        <div className="summary-block">
+          <div className="summary-label">COLLECTED</div>
+          <div className="summary-large">{rm(collected)}</div>
         </div>
-        <div className="divider" />
-        <div className="collected-label">COLLECTED</div>
-        <div className="collected-amt">{rm(collected)}</div>
-        <div className="progress-bar-container"><div className="progress-fill-bar" style={{ width: `${pct}%` }}></div></div>
-        <div className="stat-cells">
-          <div className="stat-cell-left">
-            <div className="pct-label" style={{ marginBottom: 4 }}>COLLECTED</div>
-            <div style={{ color: 'var(--green)', fontSize: '18px', fontFamily: 'DM Mono' }}>{rm(collected)}</div>
+
+        <div className="summary-grid">
+          <div>
+            <div className="summary-label">COLLECTED</div>
+            <div className="summary-green">{rm(collected)}</div>
           </div>
-          <div className="stat-cell-right">
-            <div className="pct-label" style={{ marginBottom: 4 }}>REMAINING</div>
-            <div style={{ color: remaining > 0 ? 'var(--amber)' : 'var(--green)', fontSize: '18px', fontFamily: 'DM Mono' }}>{rm(remaining)}</div>
+          <div>
+            <div className="summary-label">REMAINING</div>
+            <div className="summary-amber">{rm(remaining)}</div>
           </div>
         </div>
-        <div className="divider" />
-        <div className="large-pct">{Math.round(pct)}%</div>
-        <div className="pct-label">OF TOTAL COLLECTED</div>
-      </section>
-      <section className="right-panel">
-        <div className="ledger-header">
-          <div className="ledger-header-label">BILL DETAILS</div>
-          <div className="ledger-header-label">{bill.participants.length} PARTICIPANTS</div>
+
+        <div className="sidebar-rule"></div>
+
+        <div className="percent-large">{Math.round(pct)}%</div>
+        <div className="summary-label">OF TOTAL COLLECTED</div>
+      </aside>
+
+      <main className="bill-details-main">
+        <div className="main-header">
+          <div>BILL DETAILS</div>
+          <div>{bill.participants.length} PARTICIPANTS</div>
         </div>
-        {bill.participants.map(p => (
-          <div className={`participant-row ${p.isOrganizer ? 'organizer' : ''}`} key={p.id}>
-            <div>
-              <div className="p-name">{p.name}{p.isOrganizer ? ' (YOU)' : ''}</div>
-              <div className="p-email">{p.email}</div>
-              <div className="p-amt">{rm(p.amount)}</div>
-            </div>
-            <div>
-              {p.paid ? <span className="p-badge-paid">PAID</span> :
-               isOverdue(bill.dueDate, false) ? <span className="p-badge-overdue">OVERDUE</span> :
-               <span className="p-badge-pending">PENDING</span>}
-            </div>
-            {!p.paid && !p.isOrganizer && <button className={`btn-action ${copied[p.id] ? 'btn-nudge' : ''}`} onClick={() => copy(p.id)}>{copied[p.id] ? 'COPIED' : 'COPY LINK'}</button>}
-            {!p.paid && !p.isOrganizer && <button className={`btn-action btn-nudge ${sent[p.id] ? 'btn-nudge' : ''}`} onClick={() => nudge(p)}>{sent[p.id] ? 'SENT' : 'NUDGE'}</button>}
+
+        <div className="participants-list">
+          {bill.participants.map((p) => {
+            const organizer = isOrganizerParticipant(p);
+            const participantOverdue = isOverdue(bill.dueDate, p.paid);
+            const statusClass = p.paid ? 'status-paid' : participantOverdue ? 'status-overdue' : 'status-pending';
+            const statusLabel = p.paid ? 'PAID' : participantOverdue ? 'OVERDUE' : 'PENDING';
+            return (
+              <div className="participant-row" key={p.id}>
+                <div className="participant-info">
+                  <div className="participant-name">{p.name}{organizer ? ' (YOU)' : ''}</div>
+                  <div className="participant-email">{p.email}</div>
+                  <div className="participant-amount">{rm(p.amount)}</div>
+                </div>
+
+                <div className="participant-actions">
+                  <span className={`status-badge ${statusClass}`}>{statusLabel}</span>
+                  {!p.paid && !organizer && <button className="copy-link-button" onClick={() => copy(p.id)}>{copied[p.id] ? 'COPIED' : 'COPY LINK'}</button>}
+                  {!p.paid && !organizer && <button className="nudge-button" onClick={() => nudge(p)}>{sent[p.id] ? 'SENT' : 'NUDGE'}</button>}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <section className="share-section">
+          <div className="share-header">
+            <span>SHARE PAYMENT LINK</span>
+            <span>BILL-LEVEL LINK (FALLBACK)</span>
           </div>
-        ))}
-        <div className="share-section-header">
-          <div className="ledger-header-label">SHARE PAYMENT LINK</div>
-          <div className="ledger-header-label" style={{ color: 'var(--muted)' }}>BILL-LEVEL LINK (FALLBACK)</div>
-        </div>
-        <div className="share-body">
-          <div className="url-row">
-            <div className="url-field">{`bayar.app/pay/${bill.id}`}</div>
-            <button className="btn-copy" onClick={() => copy('all')} style={{ borderColor: copied ? 'var(--green)' : 'var(--ink)', color: copied ? 'var(--green)' : 'var(--ink)' }}>{copied ? 'COPIED' : 'COPY'}</button>
+
+          <div className="share-link-row">
+            <div className="share-link-text">{billShareUrl}</div>
+            <button className="copy-button" onClick={() => copy('all')}>{copied.all ? 'COPIED' : 'COPY'}</button>
           </div>
-          <button className="btn-wa" onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(`Pay here: ${billShareUrl}`)}`)}>SHARE VIA WHATSAPP</button>
-          <p className="helper-text">For personalized links, use the COPY LINK button next to each participant above.</p>
-        </div>
-      </section>
-    </main>
+
+          <button className="whatsapp-button" onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(`Pay here: ${billShareUrl}`)}`, '_blank')}>SHARE VIA WHATSAPP</button>
+
+          <p className="share-note">
+            For personalized links, use the COPY LINK button next to each participant above.
+          </p>
+        </section>
+      </main>
+    </div>
   );
 }
 
