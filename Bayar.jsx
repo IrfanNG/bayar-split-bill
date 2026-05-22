@@ -145,7 +145,15 @@ function injectStyles() {
     .section-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.18em; color: var(--muted); }
     .section-count { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); }
     
-    .how-it-works-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; border-bottom: 2px solid var(--rule); }
+    .payment-error-page { min-height: 100vh; background: #FAFAF7; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 48px 24px; }
+    .payment-error-wordmark { font-size: 14px; letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 48px; color: #0F0F0F; font-weight: 500; }
+    .payment-error-card { max-width: 720px; width: 100%; border: 2px solid #1A1A1A; background: #FFFFFF; padding: 64px; text-align: center; }
+    .payment-error-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: #77736B; margin-bottom: 24px; }
+    .payment-error-title { font-family: 'DM Serif Display', serif; font-size: 32px; color: #0F0F0F; margin-bottom: 24px; }
+    .payment-error-description { font-size: 16px; color: #77736B; line-height: 1.7; margin-bottom: 32px; }
+    .payment-error-status { border: 1px solid #B91C1C; color: #B91C1C; padding: 8px 16px; display: inline-block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 48px; }
+    .payment-error-button { appearance: none; display: block; width: 100%; height: 48px; background: #1A2B4A; color: #FAFAF7; border: none; font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; cursor: pointer; }
+    .payment-error-footer { margin-top: 48px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: #77736B; }
     .step-col { padding: 48px; display: flex; flex-direction: column; border-right: 1px solid var(--line); }
     .step-col:last-child { border-right: none; }
     .step-num { font-family: 'DM Serif Display', serif; font-size: 80px; line-height: 1; color: var(--line); margin-bottom: 24px; }
@@ -653,6 +661,72 @@ function injectStyles() {
       }
     }
 
+    .not-found-page {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: #FAFAF7;
+      color: #0F0F0F;
+      padding: 32px 24px;
+      font-family: Inter, system-ui, sans-serif;
+    }
+
+    .not-found-card {
+      width: min(720px, 100%);
+      border: 2px solid #1A1A1A;
+      padding: 64px;
+      text-align: center;
+      background: #FAFAF7;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    .not-found-label {
+      color: #77736B;
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    .not-found-title {
+      color: #0F0F0F;
+      font-family: Georgia, serif;
+      font-size: clamp(44px, 8vw, 72px);
+      line-height: 0.95;
+      margin: 0 0 24px;
+      font-weight: 700;
+    }
+
+    .not-found-description {
+      color: #77736B;
+      font-size: 16px;
+      line-height: 1.6;
+      margin: 0 0 40px;
+    }
+
+    .not-found-button {
+      appearance: none;
+      height: 48px;
+      padding: 0 24px;
+      border: 0;
+      border-radius: 0;
+      background: #1A2B4A;
+      color: #FAFAF7;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    @media (max-width: 640px) {
+      .not-found-card {
+        padding: 40px 24px;
+      }
+    }
+
   `;
   document.head.appendChild(style);
 }
@@ -1110,10 +1184,10 @@ function CreateBill({ session, bills, setBills }) {
   );
 }
 
-function BillDetail({ bill, showToast }) {
+function BillDetail({ bill, showToast, session }) {
   const [copied, setCopied] = useState({});
   const [sent, setSent] = useState({});
-  if (!bill) return <NotFound />;
+  if (!bill) return <NotFound session={session} />;
 
   const collected = bill.participants.filter((p) => p.paid).reduce((sum, p) => sum + Number(p.amount), 0);
   const total = Number(bill.totalAmount);
@@ -1331,11 +1405,35 @@ function PaymentSuccess({ participant }) {
 }
 
 function PaymentError() {
-  return <main className="container pay-shell"><section className="card success-card"><div className="pay-banner pay-error">❌ This payment link is invalid or has expired.</div><div className="powered"><img className="logo-img" src="/Bayar-logo.png" alt="Bayar logo" /><span>Powered by Bayar</span></div></section></main>;
+  return (
+    <main className="payment-error-page">
+      <div className="payment-error-wordmark">BAYAR</div>
+      <section className="payment-error-card">
+        <div className="payment-error-label">PAYMENT LINK ERROR</div>
+        <h1 className="payment-error-title">Link unavailable.</h1>
+        <p className="payment-error-description">This payment link is invalid or has expired. Please ask the organizer to send you a new payment link.</p>
+        <div className="payment-error-status">STATUS — INVALID LINK</div>
+        <button className="payment-error-button" onClick={() => go('/')}>GO HOME</button>
+        <div className="payment-error-footer">POWERED BY BAYAR</div>
+      </section>
+    </main>
+  );
 }
 
-function NotFound() {
-  return <main className="container auth-shell"><section className="card pay-card" style={{ textAlign: 'center' }}><h1>Not found</h1><p className="muted">This bill or page does not exist.</p><button className="btn btn-primary" onClick={() => go('/')}>Go home</button></section></main>;
+function NotFound({ session }) {
+  const destination = session ? '/dashboard' : '/';
+  return (
+    <main className="not-found-page">
+      <section className="not-found-card">
+        <div className="not-found-label">PAGE NOT FOUND</div>
+        <h1 className="not-found-title">Not found.</h1>
+        <p className="not-found-description">This bill or page does not exist.</p>
+        <button className="not-found-button" onClick={() => { window.location.hash = destination; }}>
+          {session ? 'BACK TO DASHBOARD' : 'GO HOME'}
+        </button>
+      </section>
+    </main>
+  );
 }
 
 function Toasts({ items }) {
@@ -1409,12 +1507,12 @@ export default function BayarApp() {
   const payId = payMatch?.[1];
   const payParticipantId = payMatch?.[2];
   const page = payId ? <PaymentPage bill={bills.find((b) => b.id === payId)} participantIdFromRoute={payParticipantId} updateBill={updateBill} />
-    : billId ? requireAuth(<BillDetail bill={bills.find((b) => b.id === billId)} showToast={show} />)
+    : billId ? requireAuth(<BillDetail bill={bills.find((b) => b.id === billId)} showToast={show} session={session} />)
     : route === '/login' ? <Auth mode="login" users={users} setUsers={setUsers} setSession={setSession} seedDemo={seedDemo} />
     : route === '/signup' ? <Auth mode="signup" users={users} setUsers={setUsers} setSession={setSession} seedDemo={seedDemo} />
     : route === '/dashboard' ? requireAuth(<Dashboard session={session} bills={bills} loading={loading} showToast={show} onToggleDemo={toggleDemoData} />)
     : route === '/create' ? requireAuth(<CreateBill session={session} bills={bills} setBills={setBills} />)
-    : route === '/' ? <Landing /> : <NotFound />;
+    : route === '/' ? <Landing /> : <NotFound session={session} />;
 
   return <div className="bayar-app">{page}<Toasts items={toasts} /></div>;
 }
