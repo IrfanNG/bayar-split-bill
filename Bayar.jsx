@@ -1,20 +1,4 @@
 import { useEffect, useMemo, useState } from 'react';
-import {
-  ArrowRight,
-  Banknote,
-  Bell,
-  Calendar,
-  Check,
-  Copy,
-  CreditCard,
-  LogOut,
-  Plus,
-  Receipt,
-  Send,
-  UserPlus,
-  Wallet,
-  X,
-} from 'lucide-react';
 
 const CATEGORIES = {
   makan: { icon: '🍜', label: 'Makan' },
@@ -57,7 +41,6 @@ const storage = {
 
 const uid = (prefix) => `${prefix}_${Math.random().toString(36).slice(2, 9)}`;
 const rm = (value) => `RM ${Number(value || 0).toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-const todayIso = () => new Date().toISOString().slice(0, 10);
 const formatDate = (dateStr) => {
   if (!dateStr) return '';
   const d = new Date(`${dateStr}T00:00:00`);
@@ -661,6 +644,48 @@ function injectStyles() {
       }
     }
 
+
+    @media (max-width: 900px) {
+      body { overflow-x: hidden; }
+      .nav { height: auto; padding: 18px 24px; align-items: flex-start; gap: 16px; }
+      .nav-links { gap: 16px; flex-wrap: wrap; justify-content: flex-end; }
+      .hero { grid-template-columns: 1fr; min-height: auto; }
+      .hero-left { padding: 48px 24px; border-right: none; border-bottom: 1.5px solid var(--rule); }
+      .hero-right { padding: 32px 24px; }
+      .hero-headline { font-size: clamp(44px, 15vw, 64px); }
+      .hero-cta { align-items: stretch; flex-direction: column; }
+      .btn-cta-main, .btn-cta-secondary, .btn-cta-banner { width: 100%; text-align: center; }
+      .receipt-card { max-width: 100%; padding: 24px 20px; }
+      .receipt-card .participant-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: center; }
+      .receipt-card .participant-row > span:last-child { display: grid; justify-items: end; gap: 6px; min-width: 0; }
+      .total-row { gap: 16px; }
+      .total-amount { font-size: 19px; text-align: right; }
+      .section-header, .category-strip, .footer, .cta-banner { padding-left: 24px; padding-right: 24px; }
+      .how-it-works-grid, .features-grid { grid-template-columns: 1fr; }
+      .step-col, .feature-cell { padding: 32px 24px; border-right: none; border-bottom: 1px solid var(--line); }
+      .feature-cell:nth-child(n+3) { border-bottom: 1px solid var(--line); }
+      .cta-banner, .footer, .category-strip { flex-direction: column; align-items: flex-start; gap: 20px; }
+      .footer-nav { flex-wrap: wrap; gap: 14px 20px; max-width: 100%; }
+      .auth-page { grid-template-columns: 1fr; }
+      .form-panel { padding: 48px 24px; border-right: none; border-bottom: 2px solid var(--rule); }
+      .right-panel { position: static; height: auto; padding: 40px 24px; }
+      .right-heading { font-size: clamp(38px, 13vw, 56px); }
+      .stats-strip { grid-template-columns: 1fr; gap: 18px; }
+      .dashboard-page { overflow-x: hidden; }
+      .dash-nav, .dash-header, .bills-header { padding-left: 24px; padding-right: 24px; }
+      .dash-nav { flex-direction: column; align-items: flex-start; gap: 16px; }
+      .dash-header { flex-direction: column; align-items: flex-start; gap: 24px; }
+      .dash-header-left .title { font-size: clamp(40px, 14vw, 52px); }
+      .dash-header-right, .btn-new-bill { width: 100%; }
+      .stats-row { grid-template-columns: 1fr; }
+      .stat-cell { padding: 24px; border-right: none; border-bottom: 1px solid var(--line); }
+      .bill-row { grid-template-columns: 1fr; padding: 28px 24px; gap: 22px; }
+      .actions-col { flex-direction: column; align-items: stretch; gap: 10px; }
+      .btn-view, .btn-share { width: 100%; }
+      .progress-labels { gap: 16px; flex-wrap: wrap; }
+      .paid-col { width: 100%; }
+    }
+
     .not-found-page {
       min-height: 100vh;
       display: grid;
@@ -749,31 +774,6 @@ function useToasts() {
     setTimeout(() => setToasts((items) => items.filter((item) => item.id !== id)), 3000);
   };
   return { toasts, show };
-}
-
-function Logo() {
-  return <button className="logo" onClick={() => go('/')} aria-label="Bayar home"><span className="logo-mark"><img className="logo-img" src="/Bayar-logo.png" alt="Bayar logo" /></span></button>;
-}
-
-function Header({ session, onLogout }) {
-  return (
-    <nav className="nav">
-      <div className="nav-logo" onClick={() => go('/')}>BAYAR</div>
-      <div className="nav-links">
-        {session ? (
-          <>
-            <button className="btn-nav-login" onClick={() => go('/dashboard')}>DASHBOARD</button>
-            <button className="btn-nav-login" onClick={onLogout}>LOGOUT</button>
-          </>
-        ) : (
-          <>
-            <button className="btn-nav-login" onClick={() => go('/login')}>LOGIN</button>
-            <button className="btn-nav-started" onClick={() => go('/signup')}>GET STARTED</button>
-          </>
-        )}
-      </div>
-    </nav>
-  );
 }
 
 function useScrollReveal() {
@@ -1019,11 +1019,7 @@ function Auth({ mode, users, setUsers, setSession, seedDemo }) {
   );
 }
 
-function Field({ label, value, onChange, type = 'text', placeholder, min, step }) {
-  return <div className="field"><label>{label}</label><input className="input" type={type} min={min} step={step} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} /></div>;
-}
-
-function Dashboard({ session, bills, loading, showToast, onToggleDemo }) {
+function Dashboard({ session, bills, showToast, onToggleDemo }) {
   const mine = bills.filter((b) => b.organizerId === session?.userId);
   const stats = useMemo(() => {
     const totalCollected = mine.reduce((sum, b) => sum + b.participants.filter((p) => p.paid).reduce((s, p) => s + Number(p.amount), 0), 0);
@@ -1298,33 +1294,22 @@ function BillDetail({ bill, showToast, session }) {
   );
 }
 
-function StatusBadge({ paid, overdue }) {
-  if (paid) return <span className="badge badge-paid">✅ Paid</span>;
-  if (overdue) return <span className="badge badge-overdue">❌ Overdue</span>;
-  return <span className="badge badge-pending">⏳ Pending</span>;
-}
-
 function PaymentPage({ bill, participantIdFromRoute, updateBill }) {
   const [participantId, setParticipantId] = useState(participantIdFromRoute || '');
   const [method, setMethod] = useState('FPX');
   const [receipt, setReceipt] = useState('');
-  const [modal, setModal] = useState(false);
   const [success, setSuccess] = useState(false);
-  useEffect(() => {
-    setParticipantId(participantIdFromRoute || '');
-    setModal(false);
-    setSuccess(false);
-    setReceipt('');
-  }, [participantIdFromRoute, bill?.id]);
   if (!bill) return <PaymentError />;
   const participant = bill.participants.find((p) => p.id === participantId);
+  if (participantIdFromRoute && !participant) return <PaymentError />;
+  const receiptParticipant = participant ? { ...participant, billTitle: bill.title, organizerName: bill.organizerName } : null;
   const overdue = participant ? isOverdue(bill.dueDate, participant.paid) : false;
   const confirm = async () => {
     const next = { ...bill, participants: bill.participants.map((p) => p.id === participantId ? { ...p, paid: true, paidAt: new Date().toISOString(), receipt: receipt || null, paymentMethod: method } : p) };
     await updateBill(next);
     setSuccess(true);
   };
-  if (success) return <PaymentSuccess participant={participant} />;
+  if (success || participant?.paid) return <PaymentSuccess participant={receiptParticipant} />;
   return (
     <main className="pay-container">
       <div className="pay-logo">BAYAR</div>
@@ -1361,22 +1346,6 @@ function PaymentPage({ bill, participantIdFromRoute, updateBill }) {
         )}
       </section>
     </main>
-  );
-}
-
-function PaymentModal({ participant, method, setMethod, receipt, setReceipt, onClose, onConfirm }) {
-  const methods = [{ value: 'FPX', label: '🏦 FPX' }, { value: 'Online Banking', label: '💳 Online Banking' }, { value: 'Manual Transfer', label: '📋 Manual Transfer' }];
-  return (
-    <div className="modal-backdrop">
-      <section className="card modal">
-        <div className="sheet-head"><h2 style={{ margin: 0, letterSpacing: '-.04em' }}>Complete Payment</h2><button className="btn btn-ghost btn-small" onClick={onClose} aria-label="Close payment modal"><X size={17} /></button></div>
-        <div className="sheet-amount">{rm(participant?.amount)}</div>
-        <div className="method-grid">{methods.map((item) => <button key={item.value} className={`method-card ${method === item.value ? 'active' : ''}`} onClick={() => setMethod(item.value)}>{item.label}</button>)}</div>
-        <label className="upload-zone" style={{ marginTop: 14 }}><input className="upload-input" type="file" onChange={(e) => setReceipt(e.target.files?.[0]?.name || '')} /><div>📎</div><div>Tap to upload receipt (optional)</div>{receipt && <div className="receipt-ok">✓ {receipt}</div>}</label>
-        <button className="btn btn-accent" style={{ width: '100%', marginTop: 14 }} onClick={onConfirm}>I've Paid ✓</button>
-        <p className="muted" style={{ textAlign: 'center', fontSize: 13, marginBottom: 0 }}>Your payment will be recorded and the organizer will be notified.</p>
-      </section>
-    </div>
   );
 }
 
@@ -1446,7 +1415,6 @@ export default function BayarApp() {
   const [users, setUsers] = useState([]);
   const [session, setSession] = useState(null);
   const [bills, setBills] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     injectStyles();
@@ -1460,7 +1428,6 @@ export default function BayarApp() {
       setUsers(storedUsers);
       setSession(storedSession);
       setBills(clearExistingBillsOnce ? [] : storedBills);
-      setTimeout(() => setLoading(false), 520);
     })();
   }, []);
 
@@ -1495,22 +1462,16 @@ export default function BayarApp() {
     setBills(next);
   };
 
-  const logout = async () => {
-    await storage.remove('session');
-    setSession(null);
-    go('/login');
-  };
-
   const requireAuth = (view) => session ? view : <Auth mode="login" users={users} setUsers={setUsers} setSession={setSession} seedDemo={seedDemo} />;
   const billId = route.match(/^\/bill\/([^/]+)/)?.[1];
   const payMatch = route.match(/^\/pay\/([^/]+)(?:\/([^/]+))?/);
   const payId = payMatch?.[1];
   const payParticipantId = payMatch?.[2];
-  const page = payId ? <PaymentPage bill={bills.find((b) => b.id === payId)} participantIdFromRoute={payParticipantId} updateBill={updateBill} />
+  const page = payId ? <PaymentPage key={`${payId}-${payParticipantId || 'fallback'}`} bill={bills.find((b) => b.id === payId)} participantIdFromRoute={payParticipantId} updateBill={updateBill} />
     : billId ? requireAuth(<BillDetail bill={bills.find((b) => b.id === billId)} showToast={show} session={session} />)
     : route === '/login' ? <Auth mode="login" users={users} setUsers={setUsers} setSession={setSession} seedDemo={seedDemo} />
     : route === '/signup' ? <Auth mode="signup" users={users} setUsers={setUsers} setSession={setSession} seedDemo={seedDemo} />
-    : route === '/dashboard' ? requireAuth(<Dashboard session={session} bills={bills} loading={loading} showToast={show} onToggleDemo={toggleDemoData} />)
+    : route === '/dashboard' ? requireAuth(<Dashboard session={session} bills={bills} showToast={show} onToggleDemo={toggleDemoData} />)
     : route === '/create' ? requireAuth(<CreateBill session={session} bills={bills} setBills={setBills} />)
     : route === '/' ? <Landing /> : <NotFound session={session} />;
 
