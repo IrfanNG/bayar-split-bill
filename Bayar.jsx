@@ -75,128 +75,286 @@ function injectStyles() {
   if (document.getElementById('bayar-styles')) return;
   const style = document.createElement('style');
   style.id = 'bayar-styles';
-  style.innerHTML = `
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-    :root { --bg:#F8F9FB; --navy:#0F1F3D; --green:#00C896; --danger:#FF4D4F; --muted:#6B7280; --card:#fff; --shadow:0 2px 16px rgba(0,0,0,.07); --shadow2:0 14px 38px rgba(15,31,61,.13); }
-    * { box-sizing:border-box; }
-    body { margin:0; background:var(--bg); color:var(--navy); font-family:Inter, system-ui, sans-serif; }
-    button, input, textarea, select { font:inherit; }
-    .bayar-app { min-height:100vh; background:radial-gradient(circle at 10% 0%, rgba(0,200,150,.12), transparent 34%), var(--bg); }
-    .container { width:min(1120px, calc(100% - 32px)); margin:0 auto; }
-    .nav { height:76px; display:flex; align-items:center; justify-content:space-between; gap:18px; }
-    .logo { display:inline-flex; align-items:center; border:0; background:transparent; padding:0; cursor:pointer; }
-    .logo-mark { display:inline-flex; align-items:center; }
-    .logo-img { width:120px; height:auto; object-fit:contain; display:block; }
-    .btn { border:0; border-radius:10px; padding:12px 16px; display:inline-flex; align-items:center; justify-content:center; gap:8px; cursor:pointer; transition:200ms ease; font-weight:800; text-decoration:none; white-space:nowrap; }
-    .btn:hover { transform:translateY(-1px); }
-    .btn-primary { background:var(--navy); color:#fff; box-shadow:0 10px 24px rgba(15,31,61,.18); }
-    .btn-accent { background:var(--green); color:var(--navy); box-shadow:0 10px 24px rgba(0,200,150,.24); }
-    .btn-ghost { background:#fff; color:var(--navy); box-shadow:var(--shadow); }
-    .btn-danger { background:rgba(255,77,79,.1); color:var(--danger); }
-    .btn-small { padding:9px 12px; font-size:13px; }
-    .btn:disabled { opacity:.55; cursor:not-allowed; transform:none; }
-    .card { background:var(--card); border-radius:16px; box-shadow:var(--shadow); transition:250ms ease; border:1px solid rgba(15,31,61,.04); }
-    .card:hover { box-shadow:var(--shadow2); }
-    .hero { display:grid; grid-template-columns:1.05fr .95fr; gap:42px; align-items:center; padding:64px 0 52px; }
-    .eyebrow { color:var(--green); font-weight:900; letter-spacing:.08em; text-transform:uppercase; font-size:12px; }
-    .hero h1 { margin:14px 0 14px; font-size:clamp(42px, 8vw, 82px); line-height:.94; letter-spacing:-.08em; }
-    .hero p { color:var(--muted); font-size:18px; line-height:1.65; max-width:560px; }
-    .hero-actions { display:flex; gap:12px; flex-wrap:wrap; margin-top:26px; }
-    .use-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:12px; margin-top:36px; }
-    .use-chip { padding:14px 10px; text-align:center; font-weight:800; color:var(--navy); }
-    .mock-wrap { position:relative; min-height:470px; display:grid; place-items:center; }
-    .orb { position:absolute; inset:26px; border-radius:42px; background:linear-gradient(135deg, rgba(0,200,150,.25), rgba(15,31,61,.09)); filter:blur(.2px); animation:float 5s ease-in-out infinite; }
-    .mock-card { position:relative; width:min(390px, 100%); padding:22px; transform:rotate(-2deg); }
-    .mock-row { display:flex; justify-content:space-between; gap:12px; padding:14px 0; border-bottom:1px solid #EEF1F5; }
-    .progress { height:10px; border-radius:99px; background:#EEF2F6; overflow:hidden; }
-    .progress > span { display:block; height:100%; width:0; background:linear-gradient(90deg,var(--green),#4FE3BA); border-radius:inherit; animation:grow 600ms ease forwards; }
-    .auth-shell { min-height:calc(100vh - 76px); display:grid; place-items:center; padding:28px 0 60px; }
-    .auth-card { width:min(460px, 100%); padding:28px; }
-    .form { display:grid; gap:14px; }
-    .field { display:grid; gap:7px; }
-    .field label { font-size:13px; font-weight:800; color:var(--navy); }
-    .input, .select, .textarea { width:100%; border:1px solid #E5E7EB; border-radius:10px; background:#fff; color:var(--navy); padding:13px 14px; outline:none; transition:200ms ease; }
-    .textarea { min-height:105px; resize:vertical; }
-    .input:focus, .select:focus, .textarea:focus { border-color:var(--navy); box-shadow:0 0 0 4px rgba(15,31,61,.08); }
-    .error { padding:11px 12px; border-radius:10px; background:rgba(255,77,79,.1); color:var(--danger); font-weight:700; font-size:13px; }
-    .dash { padding:26px 0 96px; }
-    .dash-head { display:flex; align-items:flex-start; justify-content:space-between; gap:18px; margin-bottom:22px; }
-    .dash-head h1 { margin:0; letter-spacing:-.05em; font-size:clamp(28px,5vw,46px); }
-    .muted { color:var(--muted); }
-    .summary { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin:18px 0 22px; }
-    .summary-card { padding:18px; display:flex; justify-content:space-between; gap:12px; align-items:flex-start; }
-    .summary-card strong { display:block; font-size:25px; letter-spacing:-.04em; margin-top:8px; }
-    .icon-box { width:40px; height:40px; border-radius:13px; background:rgba(0,200,150,.12); color:var(--green); display:grid; place-items:center; }
-    .bill-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
-    .bill-card { padding:18px; }
-    .bill-top { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
-    .cat { width:46px; height:46px; border-radius:15px; background:#F3F6FA; display:grid; place-items:center; font-size:24px; }
-    .badge { border-radius:99px; padding:6px 10px; font-size:12px; font-weight:900; display:inline-flex; align-items:center; gap:6px; }
-    .badge-paid { background:rgba(0,200,150,.12); color:#008C69; }
-    .badge-pending { background:#FFF7E6; color:#B76B00; }
-    .badge-overdue { background:rgba(255,77,79,.11); color:var(--danger); }
-    .bill-actions { display:flex; gap:9px; flex-wrap:wrap; margin-top:16px; }
-    .fab { position:fixed; right:22px; bottom:22px; z-index:10; width:62px; height:62px; border-radius:20px; padding:0; }
-    .create-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-    .full { grid-column:1 / -1; }
-    .participant { display:grid; grid-template-columns:1fr 1.1fr .75fr auto; gap:10px; align-items:end; padding:12px; border:1px solid #EEF1F5; border-radius:14px; }
-    .detail-grid { display:grid; grid-template-columns:.82fr 1.18fr; gap:18px; align-items:start; }
-    .ring-wrap { padding:24px; text-align:center; position:sticky; top:20px; }
-    .ring { width:210px; height:210px; margin:0 auto 14px; }
-    .ring circle.progress-ring { stroke:var(--green); stroke-linecap:round; transform:rotate(-90deg); transform-origin:50% 50%; transition:stroke-dashoffset 700ms ease; }
-    .money-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:16px; }
-    .mini-stat { background:#F8FAFC; border-radius:14px; padding:13px; }
-    .table { display:grid; gap:10px; }
-    .person-row { display:grid; grid-template-columns:1fr auto auto; gap:12px; align-items:center; padding:13px; background:#FBFCFE; border-radius:14px; }
-    .person-actions { display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
-    .share-box { display:flex; gap:10px; align-items:center; padding:12px; background:#F8FAFC; border-radius:14px; overflow:hidden; }
-    .share-url { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--muted); font-weight:700; }
-    .pay-card { width:min(720px, 100%); padding:24px; margin:26px auto 80px; }
-    .pay-shell { min-height:100vh; display:grid; place-items:start center; padding:34px 0 70px; }
-    .pay-wrap { width:min(480px, 100%); display:grid; gap:16px; }
-    .pay-logo { justify-content:center; margin-bottom:2px; }
-    .pay-logo .logo-img { width:92px; }
-    .public-pay-card { padding:22px; }
-    .pay-title-row { display:flex; gap:14px; align-items:flex-start; }
-    .pay-title-row h1 { margin:0 0 6px; font-size:30px; letter-spacing:-.055em; line-height:1; }
-    .pay-divider { height:1px; background:#EEF1F5; margin:18px 0; }
-    .pay-share-amount { color:var(--green); font-size:38px; font-weight:900; letter-spacing:-.06em; margin:5px 0; }
-    .pay-banner { padding:12px 13px; border-radius:14px; font-weight:800; line-height:1.45; }
-    .pay-warning { background:#FFF7E6; color:#9A5B00; }
-    .pay-info { background:rgba(0,200,150,.12); color:#007D63; text-align:center; }
-    .pay-error { background:rgba(255,77,79,.1); color:var(--danger); text-align:center; }
-    .sheet-head { display:flex; justify-content:space-between; align-items:center; gap:12px; }
-    .sheet-amount { text-align:center; color:var(--green); font-size:38px; font-weight:900; letter-spacing:-.06em; margin:8px 0 16px; }
-    .method-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:9px; }
-    .method-card { border:1px solid #E5E7EB; background:#fff; border-radius:14px; padding:13px 8px; font-weight:900; color:var(--navy); cursor:pointer; transition:200ms ease; text-align:center; }
-    .method-card.active { border-color:var(--green); background:rgba(0,200,150,.1); box-shadow:0 8px 20px rgba(0,200,150,.12); }
-    .upload-zone { display:block; width:100%; box-sizing:border-box; border:1.5px dashed #CBD5E1; border-radius:16px; padding:18px; text-align:center; color:var(--muted); font-weight:800; cursor:pointer; background:#FBFCFE; transition:200ms ease; }
-    .upload-input { display:none !important; }
-    .upload-zone:hover { border-color:var(--green); background:rgba(0,200,150,.06); }
-    .receipt-ok { color:#008C69; font-weight:900; margin-top:8px; }
-    .success-card { width:min(480px, 100%); padding:28px; text-align:center; margin:0 auto; }
-    .powered { display:grid; justify-items:center; gap:4px; margin-top:28px; font-size:13px; font-weight:800; color:var(--muted); }
-    .powered .logo-img { width:76px; }
-    .empty-card { width:min(480px, 100%); justify-self:center; text-align:center; padding:34px; }
-    .empty-card:hover { transform:translateY(-2px); }
-    .empty-illust { font-size:46px; margin-bottom:12px; }
-    .empty-card .btn { animation:softPulse 900ms ease 1.2s 1; }
-    .modal-backdrop { position:fixed; inset:0; background:rgba(15,31,61,.45); display:grid; place-items:center; padding:18px; z-index:30; }
-    .modal { width:min(460px, 100%); padding:22px; }
-    .toast-wrap { position:fixed; top:18px; right:18px; display:grid; gap:10px; z-index:50; }
-    .toast { background:var(--navy); color:#fff; padding:13px 15px; border-radius:13px; box-shadow:var(--shadow2); animation:slideIn 200ms ease; font-weight:800; }
-    .skeleton { overflow:hidden; position:relative; min-height:178px; }
-    .skeleton:after { content:''; position:absolute; inset:0; transform:translateX(-100%); background:linear-gradient(90deg, transparent, rgba(255,255,255,.75), transparent); animation:shimmer 1.1s infinite; }
-    .checkmark { width:92px; height:92px; display:block; margin:8px auto 16px; }
-    .checkmark path { stroke-dasharray:90; stroke-dashoffset:90; animation:draw .8s ease forwards .1s; }
-    @keyframes float { 0%,100%{transform:translateY(0) rotate(0)} 50%{transform:translateY(-12px) rotate(2deg)} }
-    @keyframes grow { to { width:var(--w); } }
-    @keyframes shimmer { 100% { transform:translateX(100%); } }
-    @keyframes slideIn { from { transform:translateY(-8px); opacity:0; } to { transform:none; opacity:1; } }
-    @keyframes draw { to { stroke-dashoffset:0; } }
-    @keyframes softPulse { 0%,100%{transform:scale(1)} 45%{transform:scale(1.045)} }
-    @media (max-width: 880px) { .hero, .detail-grid, .create-grid { grid-template-columns:1fr; } .summary { grid-template-columns:repeat(2,1fr); } .bill-grid { grid-template-columns:1fr; } .mock-wrap { min-height:380px; } .participant { grid-template-columns:1fr; } .ring-wrap { position:static; } }
-    @media (max-width: 560px) { .container { width:min(100% - 22px, 1120px); } .nav { height:68px; } .use-grid { grid-template-columns:repeat(2,1fr); } .summary { grid-template-columns:1fr; } .dash-head { flex-direction:column; } .person-row { grid-template-columns:1fr; } .person-actions { justify-content:flex-start; } .money-row { grid-template-columns:1fr; } .hero { padding-top:28px; } .auth-card, .pay-card { padding:18px; } .modal-backdrop { align-items:end; padding:0; } .modal { width:100%; border-radius:22px 22px 0 0; padding:22px 18px 24px; } .method-grid { grid-template-columns:1fr; } }
+  style.textContent = `
+    @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Mono:ital,wght@0,300;0,400;0,500&family=Outfit:wght@300;400;500;600&display=swap');
+    :root {
+      --ink:     #0F0F0F;
+      --paper:   #F5F3EE;
+      --rule:    #1A1A1A;
+      --muted:   #888880;
+      --accent:  #1A2B4A;
+      --green:   #1A6B45;
+      --amber:   #B45309;
+      --surface: #FFFFFF;
+      --line:    #D8D4CC;
+    }
+    * { border-radius: 0 !important; box-shadow: none !important; box-sizing: border-box; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: 'Outfit', sans-serif; }
+    button, input, textarea, select { font: inherit; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
+    @keyframes fillBar { from { width: 0%; } to { width: 100%; } }
+
+    .container { width: min(1200px, 100%); margin: 0 auto; padding: 0 48px; }
+    .btn-action { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); border: 1.5px solid var(--line); padding: 7px 14px; background: transparent; cursor: pointer; }
+    .btn-action:hover { border-color: var(--ink); color: var(--ink); }
+
+    .nav { height: 70px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1.5px solid var(--rule); padding: 0 48px; }
+    .nav-logo { font-size: 13px; letter-spacing: 0.3em; text-transform: uppercase; font-weight: 500; cursor: pointer; }
+    .nav-links { display: flex; align-items: center; gap: 32px; }
+    .btn-nav-login { text-transform: uppercase; letter-spacing: 0.15em; font-size: 12px; color: var(--ink); border: none; background: none; cursor: pointer; }
+    .btn-nav-started { text-transform: uppercase; letter-spacing: 0.12em; font-size: 12px; background: var(--accent); color: #fff; padding: 12px 28px; border: none; cursor: pointer; }
+
+    .hero { display: grid; grid-template-columns: 55% 45%; border-bottom: 1.5px solid var(--rule); min-height: 580px; align-items: stretch; }
+    .hero-left { padding: 72px 48px; border-right: 1.5px solid var(--rule); display: flex; flex-direction: column; justify-content: center; }
+    .hero-right { padding: 48px; display: flex; align-items: center; justify-content: center; }
+    .hero-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.18em; color: var(--muted); margin-bottom: 28px; animation: fadeUp 0.4s 0.0s ease both; }
+    .hero-headline { font-family: 'DM Serif Display', serif; font-size: 64px; line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 28px; animation: fadeUp 0.5s 0.1s ease both; }
+    .hero-subtext { font-size: 16px; color: var(--muted); line-height: 1.7; max-width: 400px; margin-bottom: 40px; animation: fadeUp 0.5s 0.2s ease both; }
+    .hero-cta { display: flex; gap: 16px; align-items: center; animation: fadeUp 0.5s 0.3s ease both; }
+    .btn-cta-main { background: var(--accent); color: #fff; padding: 14px 32px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; border: none; cursor: pointer; }
+    .btn-cta-secondary { background: transparent; color: var(--ink); border: 1.5px solid var(--ink); padding: 14px 32px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; cursor: pointer; }
+
+    .receipt-card { background: var(--surface); border: 2px solid var(--rule); padding: 28px 32px; width: 100%; max-width: 400px; animation: fadeUp 0.6s 0.2s ease both; }
+    .receipt-header { display: flex; justify-content: space-between; border-bottom: 1.5px solid var(--rule); padding-bottom: 14px; margin-bottom: 20px; }
+    .receipt-title { font-size: 10px; text-transform: uppercase; letter-spacing: 0.18em; color: var(--muted); }
+    .receipt-date { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); }
+    .bill-name { font-family: 'DM Serif Display', serif; font-size: 26px; margin-bottom: 4px; }
+    .bill-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 24px; }
+    .participant-row { display: flex; justify-content: space-between; align-items: center; padding: 13px 0; border-bottom: 1px solid var(--line); }
+    .participant-name { font-size: 14px; }
+    .participant-amount { font-family: 'DM Mono', monospace; font-size: 14px; }
+    .badge-paid { background: var(--accent); color: #fff; font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; padding: 3px 8px; }
+    .badge-pending { border: 1.5px solid var(--amber); color: var(--amber); font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; padding: 3px 8px; }
+    .total-row { display: flex; justify-content: space-between; border-top: 2px solid var(--rule); padding-top: 16px; margin-top: 4px; }
+    .total-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
+    .total-amount { font-family: 'DM Mono', monospace; font-size: 24px; font-weight: 500; color: var(--ink); }
+    .btn-share { width: 100%; background: var(--accent); color: #fff; border: none; padding: 14px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; margin-top: 20px; cursor: pointer; }
+    
+    .category-strip { border-top: 1.5px solid var(--rule); border-bottom: 1.5px solid var(--rule); padding: 18px 48px; display: flex; align-items: center; gap: 28px; }
+    .category-title { font-size: 10px; text-transform: uppercase; letter-spacing: 0.18em; color: var(--muted); }
+    .category-divider { width: 1px; height: 14px; background: var(--line); }
+    .category-items { font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink); }
+
+    .footer { border-top: 1.5px solid var(--rule); padding: 24px 48px; display: flex; justify-content: space-between; align-items: center; }
+    .footer-brand { font-size: 12px; text-transform: uppercase; letter-spacing: 0.2em; }
+    .footer-nav { display: flex; gap: 28px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+    .footer-copyright { font-size: 10px; color: var(--muted); letter-spacing: 0.08em; }
+
+    .section-header { width: 100%; border-top: 2px solid var(--rule); border-bottom: 1px solid var(--line); padding: 20px 48px; display: flex; justify-content: space-between; align-items: center; }
+    .section-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.18em; color: var(--muted); }
+    .section-count { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); }
+    
+    .how-it-works-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; border-bottom: 2px solid var(--rule); }
+    .step-col { padding: 48px; display: flex; flex-direction: column; border-right: 1px solid var(--line); }
+    .step-col:last-child { border-right: none; }
+    .step-num { font-family: 'DM Serif Display', serif; font-size: 80px; line-height: 1; color: var(--line); margin-bottom: 24px; }
+    .step-title { font-family: 'DM Serif Display', serif; font-size: 24px; color: var(--ink); margin-bottom: 12px; }
+    .step-desc { font-size: 14px; color: var(--muted); line-height: 1.7; }
+    .step-label { margin-top: auto; padding-top: 32px; border-top: 1px solid var(--line); font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); }
+    
+    .features-grid { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 2px solid var(--rule); }
+    .feature-cell { padding: 48px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .feature-cell:nth-child(2n) { border-right: none; }
+    .feature-cell:nth-child(n+3) { border-bottom: none; }
+    .feature-tag { font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 16px; }
+    .feature-title { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--ink); margin-bottom: 12px; }
+    .feature-desc { font-size: 14px; color: var(--muted); line-height: 1.7; max-width: 360px; }
+    
+    .cta-banner { padding: 64px 48px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--rule); }
+    .cta-banner-left h2 { font-family: 'DM Serif Display', serif; font-size: 36px; color: var(--ink); margin: 8px 0 0; }
+    .cta-banner-left .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.18em; color: var(--muted); margin-bottom: 8px; }
+    .btn-cta-banner { background: var(--accent); color: #fff; padding: 14px 36px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; border: none; cursor: pointer; }
+
+    .step-col, .feature-cell, .cta-banner { opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .step-col.visible, .feature-cell.visible, .cta-banner.visible { opacity: 1; transform: translateY(0); }
+    .step-col:nth-child(2) { transition-delay: 0.1s; }
+    .step-col:nth-child(3) { transition-delay: 0.2s; }
+    .feature-cell:nth-child(2) { transition-delay: 0.1s; }
+    .feature-cell:nth-child(3) { transition-delay: 0.1s; }
+    .feature-cell:nth-child(4) { transition-delay: 0.2s; }
+
+    .auth-page { display: grid; grid-template-columns: 45% 55%; min-height: 100vh; background: var(--paper); }
+    .form-panel { padding: 64px 56px; display: flex; flex-direction: column; justify-content: center; background: var(--surface); border-right: 2px solid var(--rule); }
+    .form-header { border-bottom: 1px solid var(--line); padding-bottom: 20px; margin-bottom: 48px; }
+    .form-brand { font-size: 12px; text-transform: uppercase; letter-spacing: 0.25em; color: var(--ink); }
+    .page-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.18em; color: var(--muted); margin-bottom: 12px; animation: fadeUp 0.4s ease both; }
+    .form-heading { font-family: 'DM Serif Display', serif; font-size: 40px; color: var(--ink); margin-bottom: 8px; animation: fadeUp 0.4s 0.1s ease both; }
+    .form-subtext { font-size: 14px; color: var(--muted); margin-bottom: 40px; animation: fadeUp 0.4s 0.15s ease both; }
+    
+    .field-wrap { margin-bottom: 20px; animation: fadeUp 0.4s 0.2s ease both; }
+    .field-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 8px; display: block; }
+    .input-auth { width: 100%; border: 1.5px solid var(--line); padding: 13px 16px; font-size: 14px; color: var(--ink); background: var(--paper); outline: none; transition: border-color 150ms ease; }
+    .input-auth:focus { border-color: var(--ink); background: var(--surface); }
+    
+    .btn-auth { margin-top: 32px; width: 100%; background: var(--accent); color: #fff; border: none; padding: 15px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; cursor: pointer; animation: fadeUp 0.4s 0.25s ease both; }
+    .btn-auth:hover { opacity: 0.85; transition: 150ms; }
+    .toggle-link { margin-top: 20px; text-align: center; font-size: 13px; color: var(--muted); }
+    .toggle-link button { background: none; border: none; color: var(--ink); cursor: pointer; font-size: 13px; text-decoration: underline; }
+    
+    .right-panel { background: var(--accent); padding: 64px 56px; display: flex; flex-direction: column; justify-content: space-between; position: sticky; top: 0; height: 100vh; animation: fadeUp 0.6s 0.1s ease both; }
+    .right-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.3em; color: rgba(255,255,255,0.4); margin-bottom: 48px; }
+    /* Animations */
+    .step-col, .feature-cell, .cta-banner { opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .step-col.visible, .feature-cell.visible, .cta-banner.visible { opacity: 1; transform: translateY(0); }
+    .step-col:nth-child(2) { transition-delay: 0.1s; }
+    .step-col:nth-child(3) { transition-delay: 0.2s; }
+    .feature-cell:nth-child(2) { transition-delay: 0.1s; }
+    .feature-cell:nth-child(3) { transition-delay: 0.1s; }
+    .feature-cell:nth-child(4) { transition-delay: 0.2s; }
+
+    .auth-page { display: grid; grid-template-columns: 45% 55%; min-height: 100vh; background: var(--paper); }
+    .form-panel { padding: 64px 56px; display: flex; flex-direction: column; justify-content: center; background: var(--surface); border-right: 2px solid var(--rule); }
+    .form-header { border-bottom: 1px solid var(--line); padding-bottom: 20px; margin-bottom: 48px; }
+    .form-brand { font-size: 12px; text-transform: uppercase; letter-spacing: 0.25em; color: var(--ink); }
+    .page-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.18em; color: var(--muted); margin-bottom: 12px; animation: fadeUp 0.4s ease both; }
+    .form-heading { font-family: 'DM Serif Display', serif; font-size: 40px; color: var(--ink); margin-bottom: 8px; animation: fadeUp 0.4s 0.1s ease both; }
+    .form-subtext { font-size: 14px; color: var(--muted); margin-bottom: 40px; animation: fadeUp 0.4s 0.15s ease both; }
+    
+    .field-wrap { margin-bottom: 20px; animation: fadeUp 0.4s 0.2s ease both; }
+    .field-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 8px; display: block; }
+    .input-auth { width: 100%; border: 1.5px solid var(--line); padding: 13px 16px; font-size: 14px; color: var(--ink); background: var(--paper); outline: none; transition: border-color 150ms ease; }
+    .input-auth:focus { border-color: var(--ink); background: var(--surface); }
+    
+    .btn-auth { margin-top: 32px; width: 100%; background: var(--accent); color: #fff; border: none; padding: 15px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; cursor: pointer; animation: fadeUp 0.4s 0.25s ease both; }
+    .btn-auth:hover { opacity: 0.85; transition: 150ms; }
+    .toggle-link { margin-top: 20px; text-align: center; font-size: 13px; color: var(--muted); }
+    .toggle-link button { background: none; border: none; color: var(--ink); cursor: pointer; font-size: 13px; text-decoration: underline; }
+    
+    .right-panel { background: var(--accent); padding: 64px 56px; display: flex; flex-direction: column; justify-content: space-between; position: sticky; top: 0; height: 100vh; animation: fadeUp 0.6s 0.1s ease both; }
+    .right-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.3em; color: rgba(255,255,255,0.4); margin-bottom: 48px; }
+    .right-heading { font-family: 'DM Serif Display', serif; font-size: 56px; line-height: 1.1; color: #fff; }
+    .right-desc { border-top: 1px solid rgba(255,255,255,0.2); padding-top: 24px; margin-top: 32px; font-size: 14px; color: rgba(255,255,255,0.6); line-height: 1.7; }
+    .stats-strip { border-top: 1px solid rgba(255,255,255,0.15); padding-top: 28px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
+    .stat-val { font-family: 'DM Mono', monospace; font-size: 22px; color: #fff; font-weight: 500; }
+    .stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(255,255,255,0.5); margin-top: 4px; }
+    
+    .error-msg { border-left: 3px solid #991B1B; padding: 10px 14px; background: #FFF5F5; font-size: 13px; color: #991B1B; margin-bottom: 20px; }
+    
+    /* Dashboard Styles */
+    .dashboard-page { background: var(--paper); min-height: 100vh; }
+    .dash-nav { background: var(--paper); border-bottom: 2px solid var(--rule); padding: 20px 48px; display: flex; justify-content: space-between; align-items: center; }
+    .dash-nav-logo { font-size: 12px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--ink); cursor: pointer; }
+    .dash-nav-right { display: flex; gap: 24px; align-items: center; }
+    .dash-nav-link { font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); }
+    .dash-nav-divider { width: 1px; height: 14px; background: var(--line); }
+    .dash-nav-logout { font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: #991B1B; border: 1.5px solid #991B1B; padding: 8px 18px; cursor: pointer; transition: 150ms; background: transparent; }
+    .dash-nav-logout:hover { background: #991B1B; color: #fff; }
+
+    .dash-header { padding: 48px 48px 32px 48px; border-bottom: 2px solid var(--rule); display: flex; justify-content: space-between; align-items: flex-end; animation: fadeUp 0.4s ease both; }
+    .dash-header-left .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.18em; color: var(--muted); margin-bottom: 8px; }
+    .dash-header-left .title { font-family: 'DM Serif Display', serif; font-size: 52px; color: var(--ink); line-height: 1; }
+    .dash-header-right { display: flex; flex-direction: column; align-items: center; }
+    .btn-new-bill { background: var(--accent); color: #fff; border: none; padding: 14px 28px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; cursor: pointer; }
+    .btn-new-bill:hover { opacity: 0.85; }
+    .btn-demo-link { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); text-align: center; margin-top: 8px; cursor: pointer; }
+    .btn-demo-link:hover { color: var(--ink); text-decoration: underline; }
+
+    .stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; border-bottom: 2px solid var(--rule); animation: fadeUp 0.4s 0.1s ease both; }
+    .stat-cell { padding: 32px 48px; border-right: 1px solid var(--line); }
+    .stat-cell:last-child { border-right: none; }
+    .stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 12px; }
+    .stat-val { font-family: 'DM Mono', monospace; font-size: 32px; color: var(--ink); font-weight: 500; }
+    .stat-val.overdue { color: #991B1B; }
+
+    .bills-header { padding: 20px 48px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; animation: fadeUp 0.4s 0.15s ease both; }
+    .bills-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.18em; color: var(--muted); }
+    .bills-count { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); }
+
+    .bill-row { padding: 28px 48px; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 260px 1fr 180px 160px; align-items: center; gap: 32px; background: var(--paper); cursor: pointer; transition: 150ms; }
+    .bill-row:hover { background: #F0EDE6; }
+    .bill-identity .cat { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 6px; }
+    .bill-identity .title { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--ink); }
+    .bill-identity .date { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .bill-identity .date.overdue { color: #991B1B; }
+
+    .progress-col { display: flex; flex-direction: column; }
+    .progress-bar { height: 3px; background: var(--line); width: 100%; }
+    .progress-fill { height: 3px; background: var(--green); animation: fillBar 800ms cubic-bezier(0.4, 0, 0.2, 1) both; animation-delay: 0.4s; }
+    .progress-labels { margin-top: 10px; display: flex; justify-content: space-between; font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted); }
+    
+    .paid-col .label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 6px; }
+    .paid-col .value { font-family: 'DM Mono', monospace; font-size: 22px; color: var(--ink); }
+    .paid-col .value.complete { color: var(--green); }
+
+    .actions-col { display: flex; gap: 12px; justify-content: flex-end; }
+    .btn-view { border: 1.5px solid var(--ink); background: transparent; color: var(--ink); padding: 9px 20px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; }
+    .btn-view:hover { background: var(--ink); color: #fff; }
+    .btn-share { border: 1.5px solid var(--line); background: transparent; color: var(--muted); padding: 9px 20px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; }
+    .btn-share:hover { border-color: var(--ink); color: var(--ink); }
+
+    .empty-dash { padding: 96px 48px; display: flex; flex-direction: column; align-items: center; border-bottom: 2px solid var(--rule); text-align: center; }
+    .empty-dash .dash { font-family: 'DM Serif Display', serif; font-size: 64px; color: var(--line); margin-bottom: 24px; }
+    .empty-dash .title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.18em; color: var(--muted); margin-bottom: 12px; }
+    .empty-dash .desc { font-size: 15px; color: var(--muted); max-width: 360px; line-height: 1.7; margin-bottom: 36px; }
+    .empty-dash .btn { background: var(--accent); color: #fff; border: none; padding: 14px 32px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; cursor: pointer; animation: pulse 0.6s 1.2s ease both; }
+    @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
+    
+    /* Create Bill Styles */
+    .create-page { min-height: 100vh; background: var(--paper); padding: 48px 24px; }
+    .create-card { max-width: 920px; margin: 0 auto; border: 2px solid var(--rule); background: #fff; padding: 48px; }
+    .create-header { margin-bottom: 32px; border-bottom: 2px solid var(--rule); padding-bottom: 32px; }
+    .create-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 8px; }
+    .create-title { font-family: 'DM Serif Display', serif; font-size: 40px; color: var(--ink); margin-bottom: 8px; }
+    .create-sub { font-size: 14px; color: var(--muted); }
+    
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .field-group { margin-bottom: 24px; }
+    .create-input { width: 100%; height: 52px; border: 1px solid var(--rule); padding: 0 16px; font-size: 14px; background: #FAFAF7; outline: none; box-sizing: border-box; font-family: inherit; }
+    .create-input:focus { border: 2px solid var(--accent); }
+    .create-textarea { width: 100%; height: 120px; border: 1px solid var(--rule); padding: 16px; font-size: 14px; background: #FAFAF7; outline: none; box-sizing: border-box; font-family: inherit; }
+    .create-textarea:focus { border: 2px solid var(--accent); }
+    
+    .participant-list { margin-top: 32px; }
+    .p-row { display: grid; grid-template-columns: 2fr 2fr 1fr auto; gap: 16px; align-items: center; padding: 20px 0; border-top: 1px solid var(--line); }
+    .btn-add-p { border: 1.5px solid var(--line); background: transparent; padding: 12px 24px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink); cursor: pointer; margin-top: 16px; }
+    .btn-add-p:hover { border-color: var(--ink); }
+    
+    .footer-actions { margin-top: 48px; border-top: 2px solid var(--rule); padding-top: 32px; display: flex; justify-content: space-between; align-items: center; }
+    .btn-create { background: var(--accent); color: #fff; border: none; padding: 18px 48px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; cursor: pointer; }
+    
+    @media (max-width: 768px) {
+      .grid-2 { grid-template-columns: 1fr; }
+      .p-row { grid-template-columns: 1fr; }
+      .footer-actions { flex-direction: column; gap: 24px; }
+      .btn-create { width: 100%; }
+    }
+
+    /* Payment Page Styles */
+    .pay-container { max-width: 760px; margin: 0 auto; padding: 48px 24px; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
+    .pay-logo { font-size: 13px; letter-spacing: 0.3em; text-transform: uppercase; text-align: center; margin-bottom: 48px; color: var(--ink); font-weight: 500; }
+    .pay-card { background: #fff; border: 2px solid var(--rule); padding: 48px; }
+    .pay-header { display: flex; justify-content: space-between; border-bottom: 1.5px solid var(--rule); padding-bottom: 14px; margin-bottom: 24px; }
+    .pay-header-text { font-size: 10px; text-transform: uppercase; letter-spacing: 0.18em; color: var(--muted); }
+    .pay-title { font-family: 'DM Serif Display', serif; font-size: 36px; color: var(--ink); margin-bottom: 8px; }
+    .pay-info { font-size: 14px; color: var(--muted); margin-bottom: 24px; }
+    .pay-warning { border: 1.5px solid #991B1B; color: #991B1B; padding: 14px; font-size: 13px; margin-bottom: 24px; }
+    
+    .selector-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 8px; display: block; }
+    .pay-select { width: 100%; border: 1.5px solid var(--line); padding: 13px 16px; font-size: 14px; background: var(--paper); outline: none; margin-bottom: 32px; font-family: inherit; }
+    .pay-select:focus { border-color: var(--ink); }
+    
+    .amt-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 4px; }
+    .amt-val { font-family: 'DM Mono', monospace; font-size: 48px; color: var(--ink); font-weight: 500; margin-bottom: 8px; }
+    .amt-sub { font-size: 14px; color: var(--muted); margin-bottom: 32px; }
+    
+    .method-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+    .method-card { border: 1.5px solid var(--line); padding: 16px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; text-align: center; cursor: pointer; background: transparent; font-family: inherit; }
+    .method-card.active { border-color: var(--accent); background: var(--accent); color: #fff; }
+    
+    .btn-confirm { width: 100%; background: var(--accent); color: #fff; border: none; padding: 16px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; cursor: pointer; }
+    .btn-confirm:hover { opacity: 0.85; }
+    .trust-note { text-align: center; font-size: 11px; color: var(--muted); margin-top: 16px; }
+    
+    .success-card { background: #fff; border: 2px solid var(--rule); padding: 48px; width: 100%; max-width: 760px; }
+    .success-header { display: flex; justify-content: space-between; border-bottom: 2px solid var(--rule); padding-bottom: 14px; margin-bottom: 24px; }
+    .success-title { font-family: 'DM Serif Display', serif; font-size: 36px; color: var(--ink); margin-bottom: 16px; }
+    .status-badge { background: var(--green); color: #fff; font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; padding: 4px 10px; display: inline-block; margin-bottom: 32px; }
+    .receipt-row { display: flex; justify-content: space-between; padding: 16px 0; border-bottom: 1px solid var(--line); }
+    .receipt-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); }
+    .receipt-val { font-size: 14px; color: var(--ink); font-weight: 500; }
+    .btn-back { width: 100%; background: var(--accent); color: #fff; border: none; padding: 16px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; cursor: pointer; margin-top: 32px; }
+    .btn-back:hover { opacity: 0.85; }
   `;
   document.head.appendChild(style);
 }
@@ -227,55 +385,166 @@ function Logo() {
 
 function Header({ session, onLogout }) {
   return (
-    <div className="container nav">
-      <Logo />
-      <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+    <nav className="nav">
+      <div className="nav-logo" onClick={() => go('/')}>BAYAR</div>
+      <div className="nav-links">
         {session ? (
           <>
-            <button className="btn btn-ghost btn-small" onClick={() => go('/dashboard')}>Dashboard</button>
-            <button className="btn btn-danger btn-small" onClick={onLogout}><LogOut size={16} /> Logout</button>
+            <button className="btn-nav-login" onClick={() => go('/dashboard')}>DASHBOARD</button>
+            <button className="btn-nav-login" onClick={onLogout}>LOGOUT</button>
           </>
         ) : (
           <>
-            <button className="btn btn-ghost btn-small" onClick={() => go('/login')}>Login</button>
-            <button className="btn btn-primary btn-small" onClick={() => go('/signup')}>Get Started</button>
+            <button className="btn-nav-login" onClick={() => go('/login')}>LOGIN</button>
+            <button className="btn-nav-started" onClick={() => go('/signup')}>GET STARTED</button>
           </>
         )}
       </div>
-    </div>
+    </nav>
   );
 }
 
+function useScrollReveal() {
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.step-col, .feature-cell, .cta-banner').forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+}
+
 function Landing() {
+  useScrollReveal();
   return (
-    <main className="container hero">
-      <section>
-        <div className="eyebrow">Premium split bill tracker</div>
-        <h1>Split bills. Collect payments. No awkward chasing.</h1>
-        <p>Bayar helps organizers track shared expenses, see who paid, nudge pending members, and record payments with a polished fintech flow.</p>
-        <div className="hero-actions">
-          <button className="btn btn-primary" onClick={() => go('/signup')}>Get Started <ArrowRight size={18} /></button>
-          <button className="btn btn-ghost" onClick={() => go('/login')}>Login</button>
-        </div>
-        <div className="use-grid">
-          {Object.values(CATEGORIES).map((cat) => <div className="card use-chip" key={cat.label}><div style={{ fontSize: 26 }}>{cat.icon}</div>{cat.label}</div>)}
-        </div>
-      </section>
-      <section className="mock-wrap">
-        <div className="orb" />
-        <div className="card mock-card">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18 }}>
-            <div><b>Bali Trip 2025</b><div className="muted">4 of 6 paid</div></div>
-            <span className="cat">✈️</span>
+    <>
+      <main className="hero">
+        <section className="hero-left">
+          <div className="hero-label">SPLIT BILL TRACKER — MY</div>
+          <h1 className="hero-headline">The cleanest way to split bills.</h1>
+          <p className="hero-subtext">A disciplined approach to shared expenses. No social feeds, no clutter. Just structural clarity for tracking and settling group payments.</p>
+          <div className="hero-cta">
+            <button className="btn-cta-main" onClick={() => go('/signup')}>GET STARTED</button>
+            <button className="btn-cta-secondary" onClick={() => go('/login')}>LOGIN</button>
           </div>
-          <div className="progress"><span style={{ '--w': '68%' }} /></div>
-          {[['Aina', 'RM 180.00', true], ['Hakim', 'RM 180.00', true], ['Danial', 'RM 180.00', false]].map(([n, a, p]) => (
-            <div className="mock-row" key={n}><span>{n}</span><b style={{ color: p ? '#008C69' : '#B76B00' }}>{a}</b></div>
-          ))}
-          <button className="btn btn-accent" style={{ width: '100%', marginTop: 18 }}>Share payment link</button>
-        </div>
+        </section>
+        <section className="hero-right">
+          <div className="receipt-card">
+            <div className="receipt-header">
+              <div className="receipt-title">BAYAR RECEIPT</div>
+              <div className="receipt-date">22 MAY 2026</div>
+            </div>
+            <div className="bill-name">Bali Trip 2025</div>
+            <div className="bill-label">TRIP — 6 PARTICIPANTS</div>
+            <div className="participant-row">
+              <span className="participant-name">Aina</span>
+              <span style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                <span className="participant-amount">RM 180.00</span>
+                <span className="badge-paid">PAID</span>
+              </span>
+            </div>
+            <div className="participant-row">
+              <span className="participant-name">Hakim</span>
+              <span style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                <span className="participant-amount">RM 450.00</span>
+                <span className="badge-pending">PENDING</span>
+              </span>
+            </div>
+            <div className="participant-row">
+              <span className="participant-name">Danial</span>
+              <span style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                <span className="participant-amount">RM 450.00</span>
+                <span className="badge-pending">PENDING</span>
+              </span>
+            </div>
+            <div className="total-row">
+              <div className="total-label">TOTAL DUE</div>
+              <div className="total-amount">RM 1,080.00</div>
+            </div>
+            <button className="btn-share">SHARE PAYMENT LINK</button>
+          </div>
+        </section>
+      </main>
+
+      <section className="section-header">
+        <div className="section-label">HOW IT WORKS</div>
+        <div className="section-count">3 STEPS</div>
       </section>
-    </main>
+      <div className="how-it-works-grid">
+        <div className="step-col">
+          <div className="step-num">01</div>
+          <div className="step-title">Create a bill.</div>
+          <div className="step-desc">Set the total, add your group members, choose how to split — equally or custom amounts. Takes under a minute.</div>
+          <div className="step-label">BILL CREATION</div>
+        </div>
+        <div className="step-col">
+          <div className="step-num">02</div>
+          <div className="step-title">Share the link.</div>
+          <div className="step-desc">Each member gets a unique payment link. Send it via WhatsApp, copy it, or nudge them directly from your dashboard.</div>
+          <div className="step-label">PAYMENT LINKS</div>
+        </div>
+        <div className="step-col">
+          <div className="step-num">03</div>
+          <div className="step-title">Track who paid.</div>
+          <div className="step-desc">Watch your dashboard update in real time. See collected amounts, pending members, and nudge anyone who hasn't paid.</div>
+          <div className="step-label">LIVE TRACKING</div>
+        </div>
+      </div>
+
+      <section className="section-header">
+        <div className="section-label">WHY BAYAR</div>
+        <div className="section-count">4 REASONS</div>
+      </section>
+      <div className="features-grid">
+        <div className="feature-cell">
+          <div className="feature-tag">PERSONALIZED</div>
+          <div className="feature-title">Every member gets their own link.</div>
+          <div className="feature-desc">No confusion about who paid what. Each participant receives a unique payment link with their exact share pre-loaded.</div>
+        </div>
+        <div className="feature-cell">
+          <div className="feature-tag">INSTANT</div>
+          <div className="feature-title">Confirm in three taps.</div>
+          <div className="feature-desc">Members open their link, select a payment method, and confirm. No account required. No app to download. Just pay.</div>
+        </div>
+        <div className="feature-cell">
+          <div className="feature-tag">ORGANISED</div>
+          <div className="feature-title">One dashboard. Every bill.</div>
+          <div className="feature-desc">See all your bills, collected amounts, and pending members in a single clean view. No spreadsheets, no group chat scrolling.</div>
+        </div>
+        <div className="feature-cell">
+          <div className="feature-tag">EFFORTLESS</div>
+          <div className="feature-title">Nudge without the awkward.</div>
+          <div className="feature-desc">One tap sends a personalized WhatsApp reminder with the member's name, amount, and payment link — directly from your dashboard.</div>
+        </div>
+      </div>
+
+      <section className="cta-banner">
+        <div className="cta-banner-left">
+          <div className="label">READY TO COLLECT?</div>
+          <h2>Stop chasing. Start collecting.</h2>
+        </div>
+        <button className="btn-cta-banner" onClick={() => go('/signup')}>GET STARTED</button>
+      </section>
+
+      <section className="category-strip">
+        <div className="category-title">GREAT FOR</div>
+        <div className="category-divider"></div>
+        <div className="category-items">MAKAN · TRIPS · HOUSE BILLS · SPORTS · EVENTS</div>
+      </section>
+      <footer className="footer">
+        <div className="footer-brand">BAYAR</div>
+        <div className="footer-nav">
+          <div>FEATURES</div>
+          <div>SECURITY</div>
+          <div>PRIVACY</div>
+          <div>TERMS</div>
+          <div>CONTACT</div>
+        </div>
+        <div className="footer-copyright">© 2025 BAYAR. ALL RIGHTS RESERVED.</div>
+      </footer>
+    </>
   );
 }
 
@@ -290,7 +559,7 @@ function Auth({ mode, users, setUsers, setSession, seedDemo }) {
     const email = form.email.trim().toLowerCase();
     if (!email || !form.password || (isSignup && !form.name.trim())) return setError('Complete all fields first.');
     if (isSignup) {
-      if (users.some((u) => u.email === email)) return setError('Email already registered.');
+      if (users.some((u) => u.email === email)) return setError('An account with this email already exists. Sign in instead.');
       const user = { id: uid('user'), name: form.name.trim(), email, password: form.password, createdAt: new Date().toISOString() };
       const next = [...users, user];
       await storage.set('users', next);
@@ -303,28 +572,76 @@ function Auth({ mode, users, setUsers, setSession, seedDemo }) {
       return;
     }
     const user = users.find((u) => u.email === email && u.password === form.password);
-    if (!user) return setError('Invalid email or password.');
+    if (!user) return setError('Incorrect email or password. Please try again.');
     const session = { userId: user.id, name: user.name, email: user.email };
     await storage.set('session', session);
     setSession(session);
     go('/dashboard');
   };
   return (
-    <main className="container auth-shell">
-      <section className="card auth-card">
-        <div style={{ textAlign: 'center', marginBottom: 22 }}>
-          <div className="logo" style={{ justifyContent: 'center' }}><span className="logo-mark"><img className="logo-img" src="/Bayar-logo.png" alt="Bayar logo" /></span></div>
-          <h1 style={{ margin: '22px 0 6px', letterSpacing: '-.05em' }}>{isSignup ? 'Create your account' : 'Welcome back'}</h1>
-          <p className="muted" style={{ margin: 0 }}>{isSignup ? 'Start tracking shared payments today.' : 'Continue collecting without awkward chasing.'}</p>
+    <main className="auth-page">
+      <section className="form-panel">
+        <div className="form-header">
+          <div className="form-brand" onClick={() => go('/')} style={{ cursor: 'pointer' }}>BAYAR</div>
         </div>
-        <form className="form" onSubmit={submit}>
-          {error && <div className="error">{error}</div>}
-          {isSignup && <Field label="Name" value={form.name} onChange={(v) => update('name', v)} placeholder="Irfan Ariff" />}
-          <Field label="Email" type="email" value={form.email} onChange={(v) => update('email', v)} placeholder="you@email.com" />
-          <Field label="Password" type="password" value={form.password} onChange={(v) => update('password', v)} placeholder="••••••••" />
-          <button className="btn btn-primary" type="submit">{isSignup ? <UserPlus size={18} /> : <CreditCard size={18} />}{isSignup ? 'Sign Up' : 'Login'}</button>
-          <button className="btn btn-ghost" type="button" onClick={() => go(isSignup ? '/login' : '/signup')}>{isSignup ? 'Already have an account? Login' : 'New here? Sign Up'}</button>
+        <div className="page-label">{isSignup ? 'CREATE ACCOUNT' : 'SIGN IN'}</div>
+        <h1 className="form-heading">{isSignup ? 'Start collecting.' : 'Welcome back.'}</h1>
+        <p className="form-subtext">{isSignup ? 'Create your account and send your first bill in minutes.' : 'Continue collecting without awkward chasing.'}</p>
+        <form onSubmit={submit}>
+          {error && <div className="error-msg">{error}</div>}
+          {isSignup && (
+            <div className="field-wrap">
+              <label className="field-label">Full Name</label>
+              <input className="input-auth" type="text" value={form.name} onChange={(e) => update('name', e.target.value)} placeholder="Irfan Ariff" />
+            </div>
+          )}
+          <div className="field-wrap">
+            <label className="field-label">Email Address</label>
+            <input className="input-auth" type="email" value={form.email} onChange={(e) => update('email', e.target.value)} placeholder="you@email.com" />
+          </div>
+          <div className="field-wrap">
+            <label className="field-label">Password</label>
+            <input className="input-auth" type="password" value={form.password} onChange={(e) => update('password', e.target.value)} placeholder="••••••••" />
+          </div>
+          <button className="btn-auth" type="submit">{isSignup ? 'CREATE ACCOUNT' : 'SIGN IN'}</button>
         </form>
+        <div className="toggle-link">
+          {isSignup ? 'Already have an account? ' : 'New here? '}
+          <button onClick={() => go(isSignup ? '/login' : '/signup')}>{isSignup ? 'SIGN IN' : 'CREATE AN ACCOUNT'}</button>
+        </div>
+      </section>
+      <section className="right-panel">
+        <div>
+          <div className="right-label">BAYAR</div>
+          <h2 className="right-heading">
+            {isSignup ? (
+              <>Bills split.<br />Payments<br />collected.</>
+            ) : (
+              <>No more<br />awkward<br />reminders.</>
+            )}
+          </h2>
+          <p className="right-desc">
+            {isSignup ? (
+              <>Set up a bill, share one link,<br />and let Bayar handle the<br />uncomfortable follow-ups.</>
+            ) : (
+              <>Your group is waiting.<br />Sign in to see who has paid<br />and who still owes you.</>
+            )}
+          </p>
+        </div>
+        <div className="stats-strip">
+          <div>
+            <div className="stat-val">RM 0</div>
+            <div className="stat-label">COLLECTED TODAY</div>
+          </div>
+          <div>
+            <div className="stat-val">0</div>
+            <div className="stat-label">BILLS ACTIVE</div>
+          </div>
+          <div>
+            <div className="stat-val">{'< 1 MIN'}</div>
+            <div className="stat-label">TO CREATE A BILL</div>
+          </div>
+        </div>
       </section>
     </main>
   );
@@ -336,7 +653,6 @@ function Field({ label, value, onChange, type = 'text', placeholder, min, step }
 
 function Dashboard({ session, bills, loading, showToast, onToggleDemo }) {
   const mine = bills.filter((b) => b.organizerId === session?.userId);
-  const hasDemo = mine.some((b) => b.demo);
   const stats = useMemo(() => {
     const totalCollected = mine.reduce((sum, b) => sum + b.participants.filter((p) => p.paid).reduce((s, p) => s + Number(p.amount), 0), 0);
     const pending = mine.reduce((sum, b) => sum + b.participants.filter((p) => !p.paid).reduce((s, p) => s + Number(p.amount), 0), 0);
@@ -344,148 +660,241 @@ function Dashboard({ session, bills, loading, showToast, onToggleDemo }) {
     return { totalCollected, pending, overdueBills };
   }, [mine]);
   return (
-    <main className="container dash">
-      <div className="dash-head">
-        <div><h1>Good morning, {session?.name} 👋</h1><p className="muted">Track every bill, payment, and pending member in one clean view.</p></div>
-        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}><button className={hasDemo ? 'btn btn-danger' : 'btn btn-ghost'} onClick={onToggleDemo}>{hasDemo ? 'Remove demo data' : 'Add demo data'}</button><button className="btn btn-primary" onClick={() => go('/create')}><Plus size={18} /> New Bill</button></div>
-      </div>
-      <section className="summary">
-        <Summary title="Total Bills Created" value={mine.length} icon={<Receipt size={20} />} />
-        <Summary title="Total Collected" value={rm(stats.totalCollected)} icon={<Banknote size={20} />} />
-        <Summary title="Pending Amount" value={rm(stats.pending)} icon={<Wallet size={20} />} />
-        <Summary title="Overdue Bills" value={stats.overdueBills} icon={<Bell size={20} />} danger />
+    <main className="dashboard-page">
+      <nav className="dash-nav">
+        <div className="dash-nav-logo" onClick={() => go('/')} style={{ cursor: 'pointer' }}>BAYAR</div>
+        <div className="dash-nav-right">
+          <div className="dash-nav-link">DASHBOARD</div>
+          <div className="dash-nav-divider"></div>
+          <button className="dash-nav-logout" onClick={() => { localStorage.removeItem('session'); go('/login'); }}>LOGOUT</button>
+        </div>
+      </nav>
+      <header className="dash-header">
+        <div className="dash-header-left">
+          <div className="label">GOOD MORNING,</div>
+          <div className="title">{session?.name}.</div>
+        </div>
+        <div className="dash-header-right">
+          <button className="btn-new-bill" onClick={() => go('/create')}>+ NEW BILL</button>
+          <div className="btn-demo-link" onClick={onToggleDemo}>{bills.some((b) => b.demo) ? 'REMOVE DEMO DATA' : 'ADD DEMO DATA'}</div>
+        </div>
+      </header>
+      <section className="stats-row">
+        <div className="stat-cell"><div className="stat-label">TOTAL BILLS</div><div className="stat-val">{mine.length}</div></div>
+        <div className="stat-cell"><div className="stat-label">TOTAL COLLECTED</div><div className="stat-val">{rm(stats.totalCollected)}</div></div>
+        <div className="stat-cell"><div className="stat-label">PENDING AMOUNT</div><div className="stat-val">{rm(stats.pending)}</div></div>
+        <div className="stat-cell"><div className="stat-label">OVERDUE BILLS</div><div className={`stat-val ${stats.overdueBills > 0 ? 'overdue' : ''}`}>{stats.overdueBills}</div></div>
       </section>
-      <section className="bill-grid">
-        {loading ? [1, 2, 3, 4].map((n) => <div className="card bill-card skeleton" key={n} />) : mine.length ? mine.map((bill) => <BillCard key={bill.id} bill={bill} showToast={showToast} />) : <EmptyState />}
+      <section className="bills-header">
+        <div className="bills-label">YOUR BILLS</div>
+        <div className="bills-count">{mine.length} BILLS</div>
       </section>
-      <button className="btn btn-primary fab" onClick={() => go('/create')} aria-label="New Bill"><Plus color="#00C896" size={28} /></button>
+      {mine.length > 0 ? (
+        mine.map((bill) => <BillRow key={bill.id} bill={bill} showToast={showToast} />)
+      ) : (
+        <div className="empty-dash">
+          <div className="dash">—</div>
+          <div className="title">NO BILLS YET</div>
+          <div className="desc">Create your first bill and share the payment link with your group.</div>
+          <button className="btn btn-primary empty-cta" onClick={() => go('/create')}>+ CREATE YOUR FIRST BILL</button>
+        </div>
+      )}
     </main>
   );
 }
 
-function Summary({ title, value, icon, danger }) {
-  return <div className="card summary-card"><div><span className="muted" style={{ fontWeight: 800, fontSize: 13 }}>{title}</span><strong style={{ color: danger ? 'var(--danger)' : 'var(--navy)' }}>{value}</strong></div><div className="icon-box">{icon}</div></div>;
-}
-
-function BillCard({ bill, showToast }) {
+function BillRow({ bill, showToast }) {
   const collected = bill.participants.filter((p) => p.paid).reduce((s, p) => s + Number(p.amount), 0);
-  const pct = Math.min(100, bill.totalAmount ? (collected / bill.totalAmount) * 100 : 0);
+  const total = Number(bill.totalAmount);
+  const pct = total ? Math.min(100, (collected / total) * 100) : 0;
   const paidCount = bill.participants.filter((p) => p.paid).length;
-  const cat = CATEGORIES[bill.category] || CATEGORIES.makan;
+  const overdue = isOverdue(bill.dueDate, paidCount === bill.participants.length);
   const share = () => { navigator.clipboard?.writeText(`${location.origin}${location.pathname}#/pay/${bill.id}`); showToast('Payment link copied!'); };
   return (
-    <article className="card bill-card">
-      <div className="bill-top"><div><span className="cat">{cat.icon}</span><h3 style={{ margin: '12px 0 4px' }}>{bill.title}</h3><div className="muted"><Calendar size={14} style={{ verticalAlign: -2 }} /> Due {formatDate(bill.dueDate)}</div></div><span className="badge badge-paid">Paid {paidCount}/{bill.participants.length}</span></div>
-      <div style={{ marginTop: 16 }}><div className="progress"><span style={{ '--w': `${pct}%` }} /></div><div className="muted" style={{ marginTop: 8, fontWeight: 700 }}>{rm(collected)} of {rm(bill.totalAmount)}</div></div>
-      <div className="bill-actions"><button className="btn btn-primary btn-small" onClick={() => go(`/bill/${bill.id}`)}>View</button><button className="btn btn-ghost btn-small" onClick={share}><Send size={15} /> Share</button></div>
-    </article>
+    <div className="bill-row" onClick={() => go(`/bill/${bill.id}`)}>
+      <div className="bill-identity">
+        <div className="cat">{CATEGORIES[bill.category]?.label.toUpperCase()}</div>
+        <div className="title">{bill.title}</div>
+        <div className={`date ${overdue ? 'overdue' : ''}`} style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{overdue ? 'OVERDUE' : 'DUE'} — {formatDate(bill.dueDate).toUpperCase()}</div>
+      </div>
+      <div className="progress-col">
+        <div className="progress-bar"><div className="progress-fill" style={{ '--pct': `${pct}%` }}></div></div>
+        <div className="progress-labels"><span>{rm(collected)} COLLECTED</span><span>{rm(total - collected)} REMAINING</span></div>
+      </div>
+      <div className="paid-col">
+        <div className="label">PAID</div>
+        <div className={`value ${paidCount === bill.participants.length ? 'complete' : ''}`}>{paidCount} / {bill.participants.length}</div>
+      </div>
+      <div className="actions-col" onClick={(e) => e.stopPropagation()}>
+        <button className="btn-view" onClick={() => go(`/bill/${bill.id}`)}>VIEW</button>
+        <button className="btn-share" onClick={share}>SHARE</button>
+      </div>
+    </div>
   );
-}
-
-function EmptyState() {
-  return <div className="card empty-card full"><div className="empty-illust">🧾✨</div><h2 style={{ margin: '0 0 8px', fontSize: 24, letterSpacing: '-.04em' }}>No bills yet</h2><p className="muted" style={{ margin: '0 auto 20px', fontSize: 16, lineHeight: 1.55 }}>Create your first bill and share the payment link with your group.</p><button className="btn btn-primary" onClick={() => go('/create')}><Plus size={18} /> Create your first bill</button></div>;
 }
 
 function CreateBill({ session, bills, setBills }) {
   const [error, setError] = useState('');
   const [split, setSplit] = useState('equal');
-  const [form, setForm] = useState({ title: '', category: 'makan', description: '', totalAmount: '', dueDate: todayIso() });
-  const [people, setPeople] = useState([{ id: uid('part'), name: '', email: '', amount: '' }, { id: uid('part'), name: '', email: '', amount: '' }]);
+  const [form, setForm] = useState({ title: '', category: 'makan', description: '', totalAmount: '', dueDate: new Date().toISOString().slice(0, 10) });
+  const [people, setPeople] = useState([{ id: uid('part'), name: '', email: '', amount: '' }]);
   const validPeople = people.filter((p) => p.name.trim() && p.email.trim());
-  const totalAmountPreview = Number(form.totalAmount) || 0;
-  const customPeopleTotal = people.filter((p) => p.name.trim() && p.email.trim()).reduce((sum, p) => sum + Number(p.amount || 0), 0);
-  const organizerCustomShare = Math.max(0, totalAmountPreview - customPeopleTotal);
+  const organizerCustomShare = Math.max(0, Number(form.totalAmount || 0) - validPeople.reduce((sum, p) => sum + Number(p.amount || 0), 0));
   const updatePerson = (id, key, value) => setPeople((items) => items.map((p) => p.id === id ? { ...p, [key]: value } : p));
-  const addPerson = () => setPeople((items) => [...items, { id: uid('part'), name: '', email: '', amount: '' }]);
-  const removePerson = (id) => setPeople((items) => items.length > 1 ? items.filter((p) => p.id !== id) : items);
+  const addPerson = () => setPeople([...people, { id: uid('part'), name: '', email: '', amount: '' }]);
+  const removePerson = (id) => setPeople(people.length > 1 ? people.filter((p) => p.id !== id) : people);
+  
   const submit = async (e) => {
     e.preventDefault();
     setError('');
     const totalAmount = Number(form.totalAmount);
-    if (!form.title.trim() || !totalAmount || !form.dueDate || validPeople.length < 1) return setError('Complete bill title, amount, due date, and at least one participant.');
-    let participants;
-    if (split === 'equal') {
-      const participantCount = validPeople.length + 1;
-      const amount = Number((totalAmount / participantCount).toFixed(2));
-      const organizerShare = amount;
-      const enteredParticipants = validPeople.map((p, index) => ({ ...p, amount: index === validPeople.length - 1 ? Number((totalAmount - organizerShare - amount * (validPeople.length - 1)).toFixed(2)) : amount }));
-      participants = [{ id: uid('part'), name: session.name, email: session.email, amount: organizerShare, isOrganizer: true }, ...enteredParticipants];
-    } else {
-      const enteredParticipants = validPeople.map((p) => ({ ...p, amount: Number(p.amount || 0) }));
-      const customTotal = enteredParticipants.reduce((s, p) => s + Number(p.amount), 0);
-      if (customTotal > totalAmount + 0.01) return setError('Participant amounts exceed the total bill. Please adjust.');
-      const organizerShare = Number((totalAmount - customTotal).toFixed(2));
-      participants = [{ id: uid('part'), name: session.name, email: session.email, amount: organizerShare, isOrganizer: true }, ...enteredParticipants];
-    }
-    const createdAt = new Date().toISOString();
+    if (!form.title.trim() || !totalAmount || !form.dueDate || validPeople.length < 1) return setError('Complete all fields');
+    
+    let participants = split === 'equal' 
+      ? [{ id: uid('part'), name: session.name, email: session.email, amount: totalAmount / (validPeople.length + 1), isOrganizer: true, paid: true }, ...validPeople.map(p => ({ ...p, amount: totalAmount / (validPeople.length + 1), paid: false }))]
+      : [{ id: uid('part'), name: session.name, email: session.email, amount: organizerCustomShare, isOrganizer: true, paid: true }, ...validPeople.map(p => ({ ...p, amount: Number(p.amount || 0), paid: false }))];
+
     const bill = {
-      id: uid('bill'), organizerId: session.userId, organizerName: session.name, title: form.title.trim(), category: form.category,
-      description: form.description.trim(), totalAmount, dueDate: form.dueDate, createdAt,
-      participants: participants.map((p) => ({ id: p.id, name: p.name.trim(), email: p.email.trim().toLowerCase(), amount: Number(p.amount), paid: !!p.isOrganizer, paidAt: p.isOrganizer ? createdAt : null, receipt: null, isOrganizer: !!p.isOrganizer })),
+      id: uid('bill'), organizerId: session.userId, organizerName: session.name, ...form,
+      participants: participants.map(p => ({ ...p, id: uid('part'), email: p.email.toLowerCase(), isOrganizer: !!p.isOrganizer, paid: !!p.paid }))
     };
     const next = [bill, ...bills];
     await storage.set('bills', next);
     setBills(next);
     go(`/bill/${bill.id}`);
   };
+
   return (
-    <main className="container dash">
-      <div className="dash-head"><div><h1>Create bill</h1><p className="muted">Set the total, add members, and generate a public payment link.</p></div></div>
-      <form className="card auth-card" style={{ width: '100%', maxWidth: 900 }} onSubmit={submit}>
-        <div className="form create-grid">
-          {error && <div className="error full">{error}</div>}
-          <Field label="Bill Title" value={form.title} onChange={(v) => setForm({ ...form, title: v })} placeholder="Bali Trip 2025" />
-          <div className="field"><label>Category</label><select className="select" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>{Object.entries(CATEGORIES).map(([key, cat]) => <option key={key} value={key}>{cat.icon} {cat.label}</option>)}</select></div>
-          <div className="field full"><label>Description</label><textarea className="textarea" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Flights, hotel, food, and shared transport." /></div>
-          <Field label="Total Amount (RM)" type="number" min="0" step="0.01" value={form.totalAmount} onChange={(v) => setForm({ ...form, totalAmount: v })} placeholder="1200.00" />
-          <div className="field"><Field label="Due Date" type="date" value={form.dueDate} onChange={(v) => setForm({ ...form, dueDate: v })} />{form.dueDate && <span className="muted" style={{ fontSize: 13, fontWeight: 800 }}>Selected: {formatDate(form.dueDate)}</span>}</div>
-          <div className="field full"><label>Split Method</label><select className="select" value={split} onChange={(e) => setSplit(e.target.value)}><option value="equal">Equal split</option><option value="custom">Custom per person</option></select></div>
-          {split === 'custom' && <div className="card full" style={{ padding: 14, background: '#FBFCFE' }}><div className="muted" style={{ fontWeight: 900 }}>Your share (you)</div><strong style={{ color: customPeopleTotal > totalAmountPreview && totalAmountPreview ? 'var(--danger)' : 'var(--green)', fontSize: 24, letterSpacing: '-.04em' }}>{rm(organizerCustomShare)}</strong><p className="muted" style={{ margin: '6px 0 0', fontSize: 13 }}>Auto-calculated from total minus participant custom amounts.</p></div>}
-          <div className="full"><h3>Participants</h3><div className="form">{people.map((p) => <div className="participant" key={p.id}><Field label="Name" value={p.name} onChange={(v) => updatePerson(p.id, 'name', v)} placeholder="Aina" /><Field label="Email" type="email" value={p.email} onChange={(v) => updatePerson(p.id, 'email', v)} placeholder="aina@email.com" />{split === 'custom' ? <Field label="Amount" type="number" step="0.01" value={p.amount} onChange={(v) => updatePerson(p.id, 'amount', v)} placeholder="150.00" /> : <div className="muted" style={{ fontWeight: 800 }}>Auto split</div>}<button className="btn btn-danger btn-small" type="button" onClick={() => removePerson(p.id)}><X size={15} /></button></div>)}</div><button className="btn btn-ghost" style={{ marginTop: 12 }} type="button" onClick={addPerson}><Plus size={17} /> Add participant</button></div>
-          <button className="btn btn-primary full" type="submit">Create Bill <ArrowRight size={18} /></button>
+    <main className="create-page">
+      <div className="pay-logo" onClick={() => go('/dashboard')} style={{ cursor: 'pointer' }}>BAYAR</div>
+      <form className="create-card" onSubmit={submit}>
+        <header className="create-header">
+          <div className="create-label">NEW BILL</div>
+          <h1 className="create-title">Create bill.</h1>
+          <p className="create-sub">Set the total, add members, and generate a public payment link.</p>
+        </header>
+        {error && <div className="error-msg" style={{ marginBottom: 24 }}>{error}</div>}
+        <div className="grid-2">
+          <div className="field-group"><label className="selector-label">TITLE</label><input className="create-input" placeholder="Bali Trip 2025" value={form.title} onChange={e => setForm({...form, title: e.target.value})} /></div>
+          <div className="field-group"><label className="selector-label">CATEGORY</label><select className="pay-select" value={form.category} onChange={e => setForm({...form, category: e.target.value})}>{Object.entries(CATEGORIES).map(([k, c]) => <option key={k} value={k}>{c.label}</option>)}</select></div>
         </div>
+        <div className="field-group"><label className="selector-label">DESCRIPTION</label><textarea className="create-textarea" placeholder="Shared expenses..." value={form.description} onChange={e => setForm({...form, description: e.target.value})} /></div>
+        <div className="grid-2">
+          <div className="field-group"><label className="selector-label">TOTAL AMOUNT (RM)</label><input className="create-input" type="number" placeholder="0.00" value={form.totalAmount} onChange={e => setForm({...form, totalAmount: e.target.value})} /></div>
+          <div className="field-group"><label className="selector-label">DUE DATE</label><input className="create-input" type="date" value={form.dueDate} onChange={e => setForm({...form, dueDate: e.target.value})} /></div>
+        </div>
+        <div className="field-group"><label className="selector-label">SPLIT METHOD</label><select className="pay-select" value={split} onChange={e => setSplit(e.target.value)}><option value="equal">Equal split</option><option value="custom">Custom amounts</option></select></div>
+        
+        <div className="participant-list">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+            <label className="selector-label">PARTICIPANTS</label>
+            <div className="create-label">{split === 'equal' ? 'EQUAL SPLIT AUTOMATIC' : 'MANUAL ENTRY'}</div>
+          </div>
+          {people.map(p => (
+            <div className="p-row" key={p.id}>
+              <input className="create-input" placeholder="Name" value={p.name} onChange={e => updatePerson(p.id, 'name', e.target.value)} />
+              <input className="create-input" placeholder="Email" value={p.email} onChange={e => updatePerson(p.id, 'email', e.target.value)} />
+              {split === 'custom' ? <input className="create-input" placeholder="RM 0.00" value={p.amount} onChange={e => updatePerson(p.id, 'amount', e.target.value)} /> : <div className="create-input" style={{ display: 'flex', alignItems: 'center', background: '#E0DDD6' }}>RM {rm(Number(form.totalAmount)/(people.length+1))}</div>}
+              <button type="button" className="btn-action" onClick={() => removePerson(p.id)}>REMOVE</button>
+            </div>
+          ))}
+          <button type="button" className="btn-add-p" onClick={addPerson}>+ ADD PARTICIPANT</button>
+        </div>
+        <footer className="footer-actions">
+          <div>
+            <div className="create-label">TOTAL</div>
+            <div style={{ fontSize: '24px', fontWeight: '500', fontFamily: 'DM Mono' }}>{rm(Number(form.totalAmount))}</div>
+          </div>
+          <button className="btn-create" type="submit">CREATE BILL →</button>
+        </footer>
       </form>
     </main>
   );
 }
 
 function BillDetail({ bill, showToast }) {
-  const [copied, setCopied] = useState(false);
-  const [copiedParticipantId, setCopiedParticipantId] = useState('');
+  const [copied, setCopied] = useState({});
+  const [sent, setSent] = useState({});
   if (!bill) return <NotFound />;
   const collected = bill.participants.filter((p) => p.paid).reduce((s, p) => s + Number(p.amount), 0);
-  const remaining = bill.totalAmount - collected;
-  const pct = Math.min(100, bill.totalAmount ? (collected / bill.totalAmount) * 100 : 0);
-  const radius = 82;
-  const circ = 2 * Math.PI * radius;
+  const total = Number(bill.totalAmount);
+  const remaining = total - collected;
+  const pct = total ? Math.min(100, (collected / total) * 100) : 0;
+  const overdue = isOverdue(bill.dueDate, bill.participants.every(p => p.paid));
   const billShareUrl = `${location.origin}${location.pathname}#/pay/${bill.id}`;
-  const displayUrl = `bayar.app/pay/${bill.id}`;
-  const copy = async () => { await navigator.clipboard?.writeText(billShareUrl); setCopied(true); showToast('Bill link copied to clipboard!'); setTimeout(() => setCopied(false), 1600); };
-  const copyParticipant = async (person) => {
-    await navigator.clipboard?.writeText(getParticipantLink(bill.id, person.id));
-    setCopiedParticipantId(person.id);
-    showToast(`${person.name}'s payment link copied!`);
-    setTimeout(() => setCopiedParticipantId(''), 2000);
+  const copy = async (pId = 'all') => {
+    const url = pId === 'all' ? billShareUrl : getParticipantLink(bill.id, pId);
+    await navigator.clipboard.writeText(url);
+    if (pId === 'all') setCopied(true); else setCopied({ ...copied, [pId]: true });
+    showToast('Link copied!');
+    setTimeout(() => { if (pId === 'all') setCopied(false); else setCopied({ ...copied, [pId]: false }); }, 2000);
   };
-  const wa = () => {
-    window.open(`https://wa.me/?text=${encodeURIComponent(`Hey! You have a pending payment for ${bill.title}.\nOpen the bill here: ${billShareUrl} 💳`)}`, '_blank');
-  };
-  const nudgeViaWhatsApp = (person) => {
-    const msg = `Hey ${person.name}! Your share of RM ${Number(person.amount).toFixed(2)} for ${bill.title} is due on ${formatDate(bill.dueDate)}. Pay here: ${getParticipantLink(bill.id, person.id)} 💳`;
-    window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+  const nudge = async (p) => {
+    window.open(`https://wa.me/?text=${encodeURIComponent(`Pay here: ${getParticipantLink(bill.id, p.id)}`)}`, '_blank');
+    setSent({ ...sent, [p.id]: true });
+    setTimeout(() => setSent({ ...sent, [p.id]: false }), 2000);
   };
   return (
-    <main className="container dash detail-grid">
-      <section className="card ring-wrap">
-        <div className="cat" style={{ margin: '0 auto 12px' }}>{CATEGORIES[bill.category]?.icon}</div>
-        <h1 style={{ margin: '0 0 6px', letterSpacing: '-.05em' }}>{bill.title}</h1><p className="muted">Due {formatDate(bill.dueDate)}</p>
-        <svg className="ring" viewBox="0 0 210 210"><circle cx="105" cy="105" r={radius} fill="none" stroke="#EEF2F6" strokeWidth="16" /><circle className="progress-ring" cx="105" cy="105" r={radius} fill="none" strokeWidth="16" strokeDasharray={circ} strokeDashoffset={circ - (pct / 100) * circ} /><text x="105" y="99" textAnchor="middle" fontSize="33" fontWeight="900" fill="#0F1F3D">{Math.round(pct)}%</text><text x="105" y="126" textAnchor="middle" fontSize="13" fontWeight="800" fill="#6B7280">collected</text></svg>
-        <div className="progress"><span style={{ '--w': `${pct}%` }} /></div>
-        <div className="money-row"><div className="mini-stat"><div className="muted">Collected</div><b>{rm(collected)}</b></div><div className="mini-stat"><div className="muted">Remaining</div><b>{rm(remaining)}</b></div></div>
+    <main className="bill-detail-page">
+      <section className="left-panel">
+        <div className="back-link" onClick={() => go('/dashboard')}>← ALL BILLS</div>
+        <div className="bill-cat">{CATEGORIES[bill.category]?.label.toUpperCase()}</div>
+        <h1 className="bill-title">{bill.title}</h1>
+        <p className="bill-desc">{bill.description}</p>
+        <div className={`bill-due ${overdue ? 'overdue' : ''}`}>
+          {overdue ? 'OVERDUE' : 'DUE'} — {formatDate(bill.dueDate).toUpperCase()}
+        </div>
+        <div className="divider" />
+        <div className="collected-label">COLLECTED</div>
+        <div className="collected-amt">{rm(collected)}</div>
+        <div className="progress-bar-container"><div className="progress-fill-bar" style={{ width: `${pct}%` }}></div></div>
+        <div className="stat-cells">
+          <div className="stat-cell-left">
+            <div className="pct-label" style={{ marginBottom: 4 }}>COLLECTED</div>
+            <div style={{ color: 'var(--green)', fontSize: '18px', fontFamily: 'DM Mono' }}>{rm(collected)}</div>
+          </div>
+          <div className="stat-cell-right">
+            <div className="pct-label" style={{ marginBottom: 4 }}>REMAINING</div>
+            <div style={{ color: remaining > 0 ? 'var(--amber)' : 'var(--green)', fontSize: '18px', fontFamily: 'DM Mono' }}>{rm(remaining)}</div>
+          </div>
+        </div>
+        <div className="divider" />
+        <div className="large-pct">{Math.round(pct)}%</div>
+        <div className="pct-label">OF TOTAL COLLECTED</div>
       </section>
-      <section className="form">
-        <div className="card bill-card"><h2>Bill details</h2><p className="muted">{bill.description || 'No description added.'}</p><div className="table">{bill.participants.map((p) => <div className="person-row" key={p.id}><div><b>{p.name}{p.isOrganizer ? ' (you)' : ''}</b><div className="muted">{p.email} · {rm(p.amount)}</div></div><StatusBadge paid={p.paid} overdue={isOverdue(bill.dueDate, p.paid)} /><div className="person-actions">{!p.paid && <button className="btn btn-ghost btn-small" onClick={() => copyParticipant(p)} aria-label={`Copy ${p.name}'s payment link`}>{copiedParticipantId === p.id ? <Check size={15} color="var(--green)" /> : <Copy size={15} />}</button>}{!p.paid && <button className="btn btn-ghost btn-small" onClick={() => nudgeViaWhatsApp(p)}>Nudge 👋</button>}</div></div>)}</div></div>
-        <div className="card bill-card"><h2>Bill-level link (fallback)</h2><p className="muted">Share this if you want participants to self-identify, or use the per-person copy buttons above.</p><div className="share-box"><span className="share-url">{displayUrl}</span><button className="btn btn-primary btn-small" onClick={copy}>{copied ? 'Copied! ✓' : <><Copy size={15} /> Copy</>}</button></div><p className="muted" style={{ fontSize: 13, margin: '8px 0 0' }}>For personalized links, use the copy icon next to each participant above.</p><button className="btn btn-accent" style={{ marginTop: 12 }} onClick={wa}>Share via WhatsApp</button></div>
+      <section className="right-panel">
+        <div className="ledger-header">
+          <div className="ledger-header-label">BILL DETAILS</div>
+          <div className="ledger-header-label">{bill.participants.length} PARTICIPANTS</div>
+        </div>
+        {bill.participants.map(p => (
+          <div className={`participant-row ${p.isOrganizer ? 'organizer' : ''}`} key={p.id}>
+            <div>
+              <div className="p-name">{p.name}{p.isOrganizer ? ' (YOU)' : ''}</div>
+              <div className="p-email">{p.email}</div>
+              <div className="p-amt">{rm(p.amount)}</div>
+            </div>
+            <div>
+              {p.paid ? <span className="p-badge-paid">PAID</span> :
+               isOverdue(bill.dueDate, false) ? <span className="p-badge-overdue">OVERDUE</span> :
+               <span className="p-badge-pending">PENDING</span>}
+            </div>
+            {!p.paid && !p.isOrganizer && <button className={`btn-action ${copied[p.id] ? 'btn-nudge' : ''}`} onClick={() => copy(p.id)}>{copied[p.id] ? 'COPIED' : 'COPY LINK'}</button>}
+            {!p.paid && !p.isOrganizer && <button className={`btn-action btn-nudge ${sent[p.id] ? 'btn-nudge' : ''}`} onClick={() => nudge(p)}>{sent[p.id] ? 'SENT' : 'NUDGE'}</button>}
+          </div>
+        ))}
+        <div className="share-section-header">
+          <div className="ledger-header-label">SHARE PAYMENT LINK</div>
+          <div className="ledger-header-label" style={{ color: 'var(--muted)' }}>BILL-LEVEL LINK (FALLBACK)</div>
+        </div>
+        <div className="share-body">
+          <div className="url-row">
+            <div className="url-field">{`bayar.app/pay/${bill.id}`}</div>
+            <button className="btn-copy" onClick={() => copy('all')} style={{ borderColor: copied ? 'var(--green)' : 'var(--ink)', color: copied ? 'var(--green)' : 'var(--ink)' }}>{copied ? 'COPIED' : 'COPY'}</button>
+          </div>
+          <button className="btn-wa" onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(`Pay here: ${billShareUrl}`)}`)}>SHARE VIA WHATSAPP</button>
+          <p className="helper-text">For personalized links, use the COPY LINK button next to each participant above.</p>
+        </div>
       </section>
     </main>
   );
@@ -511,31 +920,48 @@ function PaymentPage({ bill, participantIdFromRoute, updateBill }) {
   }, [participantIdFromRoute, bill?.id]);
   if (!bill) return <PaymentError />;
   const participant = bill.participants.find((p) => p.id === participantId);
-  if (participantIdFromRoute && !participant) return <PaymentError />;
-  const cat = CATEGORIES[bill.category] || CATEGORIES.makan;
   const overdue = participant ? isOverdue(bill.dueDate, participant.paid) : false;
   const confirm = async () => {
     const next = { ...bill, participants: bill.participants.map((p) => p.id === participantId ? { ...p, paid: true, paidAt: new Date().toISOString(), receipt: receipt || null, paymentMethod: method } : p) };
     await updateBill(next);
-    setModal(false);
     setSuccess(true);
   };
   if (success) return <PaymentSuccess participant={participant} />;
   return (
-    <main className="container pay-shell">
-      <div className="pay-wrap">
-        <div className="logo pay-logo"><span className="logo-mark"><img className="logo-img" src="/Bayar-logo.png" alt="Bayar logo" /></span></div>
-        {overdue && <div className="pay-banner pay-warning">⚠️ This bill was due on {formatDate(bill.dueDate)}. You can still confirm payment.</div>}
-        <section className="card public-pay-card">
-          <div className="pay-title-row"><span className="cat">{cat.icon}</span><div><h1>{bill.title}</h1><p className="muted" style={{ margin: 0, fontWeight: 700 }}>Requested by {bill.organizerName || 'Organizer'}</p></div></div>
-          <p className="muted" style={{ lineHeight: 1.6 }}>{bill.description || 'No description added.'}</p>
-          <p className="muted" style={{ display: 'flex', alignItems: 'center', gap: 7, fontWeight: 800 }}><Calendar size={16} /> Due {formatDate(bill.dueDate)}</p>
-          {!participantIdFromRoute && <div className="field" style={{ marginTop: 12 }}><label>Select your name</label><select className="select" value={participantId} onChange={(e) => setParticipantId(e.target.value)}><option value="">Choose participant</option>{bill.participants.map((p) => <option key={p.id} value={p.id}>{p.name} — {rm(p.amount)} {p.paid ? '(Paid)' : ''}</option>)}</select></div>}
-          {participant && <><div className="pay-divider" /><div className="muted" style={{ fontWeight: 900 }}>Your share</div><div className="pay-share-amount">{rm(participant.amount)}</div><p className="muted" style={{ margin: 0 }}>This is your portion of {bill.title}</p></>}
-        </section>
-        {participant?.paid ? <div className="pay-banner pay-info">✅ You've already confirmed payment for this bill.</div> : <button className="btn btn-primary" style={{ width: '100%' }} disabled={!participant} onClick={() => setModal(true)}>Confirm My Payment <ArrowRight size={18} /></button>}
-      </div>
-      {modal && <PaymentModal participant={participant} method={method} setMethod={setMethod} receipt={receipt} setReceipt={setReceipt} onClose={() => setModal(false)} onConfirm={confirm} />}
+    <main className="pay-container">
+      <div className="pay-logo">BAYAR</div>
+      <section className="pay-card">
+        <div className="pay-header">
+          <div className="pay-header-text">PAYMENT REQUEST</div>
+          <div className="pay-header-text">DUE {formatDate(bill.dueDate).toUpperCase()}</div>
+        </div>
+        {overdue && <div className="pay-warning">PAYMENT WAS DUE ON {formatDate(bill.dueDate).toUpperCase()}. YOU CAN STILL CONFIRM PAYMENT.</div>}
+        <h1 className="pay-title">{bill.title}</h1>
+        <p style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.15em', color: 'var(--muted)', marginBottom: '8px' }}>{CATEGORIES[bill.category]?.label.toUpperCase()}</p>
+        <p className="pay-info">{bill.description || 'No description added.'}</p>
+        {!participantIdFromRoute && (
+          <>
+            <label className="selector-label">SELECT YOUR NAME</label>
+            <select className="pay-select" value={participantId} onChange={(e) => setParticipantId(e.target.value)}>
+              <option value="">CHOOSE PARTICIPANT</option>
+              {bill.participants.map((p) => <option key={p.id} value={p.id}>{p.name} — {rm(p.amount)}</option>)}
+            </select>
+          </>
+        )}
+        {participant && (
+          <>
+            <div className="amt-label">YOUR SHARE</div>
+            <div className="amt-val">{rm(participant.amount)}</div>
+            <p className="amt-sub">This is your portion of {bill.title}.</p>
+            <div className="method-grid">
+              {['FPX', 'ONLINE BANKING', 'MANUAL'].map((m) => <button key={m} className={`method-card ${method === m ? 'active' : ''}`} onClick={() => setMethod(m)}>{m}</button>)}
+            </div>
+            {method === 'MANUAL' && <label className="method-card" style={{ display: 'block', width: '100%', marginBottom: '24px' }}><input type="file" onChange={(e) => setReceipt(e.target.files?.[0]?.name || '')} style={{ display: 'none' }} />{receipt ? `RECEIPT: ${receipt}` : 'UPLOAD RECEIPT (OPTIONAL)'}</label>}
+            <button className="btn-confirm" onClick={confirm}>CONFIRM MY PAYMENT →</button>
+            <p className="trust-note">Your confirmation will update the organizer’s bill status.</p>
+          </>
+        )}
+      </section>
     </main>
   );
 }
@@ -557,7 +983,27 @@ function PaymentModal({ participant, method, setMethod, receipt, setReceipt, onC
 }
 
 function PaymentSuccess({ participant }) {
-  return <main className="container pay-shell"><section className="card success-card"><svg className="checkmark" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="rgba(0,200,150,.12)" /><path d="M30 52 L44 66 L72 34" fill="none" stroke="#00C896" strokeWidth="9" strokeLinecap="round" strokeLinejoin="round" /></svg><h1 style={{ letterSpacing: '-.05em' }}>Payment Recorded! 🎉</h1><p className="muted" style={{ fontSize: 17, lineHeight: 1.55 }}>Thanks {participant?.name}! Your payment of {rm(participant?.amount)} has been recorded.</p><p className="muted">The organizer has been notified.</p><div className="powered"><img className="logo-img" src="/Bayar-logo.png" alt="Bayar logo" /><span>Powered by Bayar</span></div></section></main>;
+  return (
+    <main className="pay-container">
+      <div className="pay-logo">BAYAR</div>
+      <section className="success-card">
+        <div className="success-header">
+          <div className="pay-header-text">PAYMENT RECEIPT</div>
+          <div className="pay-header-text">RECORDED</div>
+        </div>
+        <h1 className="success-title">Payment recorded.</h1>
+        <div className="status-badge">PAID</div>
+        <div className="receipt-row"><span className="receipt-label">BILL</span><span className="receipt-val">{participant?.billTitle || 'N/A'}</span></div>
+        <div className="receipt-row"><span className="receipt-label">PARTICIPANT</span><span className="receipt-val">{participant?.name}</span></div>
+        <div className="receipt-row"><span className="receipt-label">AMOUNT</span><span className="receipt-val">{rm(participant?.amount)}</span></div>
+        <div className="receipt-row"><span className="receipt-label">STATUS</span><span className="receipt-val" style={{ color: 'var(--green)' }}>PAID</span></div>
+        <div className="receipt-row"><span className="receipt-label">ORGANIZER</span><span className="receipt-val">{participant?.organizerName || 'N/A'}</span></div>
+        <p style={{ marginTop: '32px', color: 'var(--muted)', fontSize: '13px', lineHeight: '1.6' }}>Your payment confirmation has been recorded. The organizer has been notified.</p>
+        <button className="btn-back" onClick={() => go('/dashboard')}>BACK TO DASHBOARD →</button>
+        <p className="trust-note" style={{ marginTop: '32px' }}>POWERED BY BAYAR</p>
+      </section>
+    </main>
+  );
 }
 
 function PaymentError() {
@@ -646,7 +1092,7 @@ export default function BayarApp() {
     : route === '/create' ? requireAuth(<CreateBill session={session} bills={bills} setBills={setBills} />)
     : route === '/' ? <Landing /> : <NotFound />;
 
-  return <div className="bayar-app">{!payId && <Header session={session} onLogout={logout} />}{page}<Toasts items={toasts} /></div>;
+  return <div className="bayar-app">{page}<Toasts items={toasts} /></div>;
 }
 
 function demoBill(user, title, category, total, paidCount, peopleCount, dueOffset) {
