@@ -91,7 +91,7 @@ function injectStyles() {
     .hero { display: grid; grid-template-columns: 55% 45%; border-bottom: 1.5px solid var(--rule); min-height: 580px; align-items: stretch; }
     .hero-left { padding: 72px 48px; border-right: 1.5px solid var(--rule); display: flex; flex-direction: column; justify-content: center; }
     .hero-right { padding: 48px; display: flex; align-items: center; justify-content: center; }
-    .hero-brand { font-size: 13px; letter-spacing: 0.3em; text-transform: uppercase; font-weight: 600; color: var(--ink); margin-bottom: 18px; animation: fadeUp 0.35s 0.0s ease both; }
+    .hero-brand { font-size: 18px; letter-spacing: 0.32em; text-transform: uppercase; font-weight: 700; color: var(--ink); margin-bottom: 18px; animation: fadeUp 0.35s 0.0s ease both; }
     .hero-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.18em; color: var(--muted); margin-bottom: 28px; animation: fadeUp 0.4s 0.05s ease both; }
     .hero-headline { font-family: 'DM Serif Display', serif; font-size: 64px; line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 28px; animation: fadeUp 0.5s 0.1s ease both; }
     .hero-subtext { font-size: 16px; color: var(--muted); line-height: 1.7; max-width: 400px; margin-bottom: 40px; animation: fadeUp 0.5s 0.2s ease both; }
