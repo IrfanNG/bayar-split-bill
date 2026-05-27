@@ -106,8 +106,8 @@ function injectStyles() {
     .bill-name { font-family: 'DM Serif Display', serif; font-size: 26px; margin-bottom: 4px; }
     .bill-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 24px; }
     .participant-row { display: flex; justify-content: space-between; align-items: center; padding: 13px 0; border-bottom: 1px solid var(--line); }
-    .participant-name { font-size: 14px; }
-    .participant-amount { font-family: 'DM Mono', monospace; font-size: 14px; }
+    .receipt-card .participant-name { font-size: 14px; color: var(--ink); }
+    .receipt-card .participant-amount { font-family: 'DM Mono', monospace; font-size: 14px; color: var(--ink); }
     .badge-paid { background: var(--accent); color: #fff; font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; padding: 3px 8px; }
     .badge-pending { border: 1.5px solid var(--amber); color: var(--amber); font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; padding: 3px 8px; }
     .total-row { display: flex; justify-content: space-between; border-top: 2px solid var(--rule); padding-top: 16px; margin-top: 4px; }
